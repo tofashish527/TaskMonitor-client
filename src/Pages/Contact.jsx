@@ -11,14 +11,8 @@ const Contact = () => {
                     <p className="text-gray-600 text-lg">
                         Have a question or want to discuss something related to employee tasks or performance? Drop a message and we’ll get back to you!
                     </p>
-                    <img 
-                        src="/assets/svg/doodle.svg" 
-                        alt="Team Communication" 
-                        className="w-64 h-auto mt-6 hidden md:block"
-                    />
+                   
                 </div>
-
-                {/* Right Side - Form */}
                 <form className="space-y-5">
                     <div>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
