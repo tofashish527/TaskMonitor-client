@@ -1,9 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router';
 import Logo from './Logo';
+import useAuth from '../hooks/useAuth';
 
 const Navbar = () => {
- 
+      const {user,logout}=useAuth();
+   const handleLogOut = () => {
+    logout()
+      .then(() => console.log("Log Out Successfully!"))
+      .catch((error) => console.log(error));
+  };
 
     const navlinks=<>
         <li><NavLink to="/">Home</NavLink></li>
@@ -31,7 +37,7 @@ const Navbar = () => {
     </ul>
   </div>
   <div className="navbar-end">
-          {/* <div className="navbar-end flex gap-3">
+          <div className="navbar-end flex gap-3">
         {user ? (
           <button
             onClick={handleLogOut}
@@ -56,7 +62,7 @@ const Navbar = () => {
             </NavLink>
           </>
         )}
-      </div> */}
+      </div>
   </div>
 </div>
     );
