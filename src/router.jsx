@@ -7,6 +7,11 @@ import Contact from "./Pages/Contact";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import AuthLayout from "./Layout/AuthLayout";
+import WorkSheet from "./Pages/DashBoard/WorkSheet";
+import DashboardHome from "./Pages/DashBoard/DashboardHome";
+import PrivateRoute from "./Context/PrivateRoute";
+import DashboardLayout from "./Layout/DashboardLayout";
+import AllEmployeeList from "./Pages/DashBoard/AllEmployeeList";
 
 
 export const router = createBrowserRouter([
@@ -39,4 +44,23 @@ export const router = createBrowserRouter([
         },
     ]
   },
+   {
+     path :"/dashboard",
+    element:<PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
+    children:
+    [
+      {
+        index:true,
+        Component:DashboardHome,
+      },
+      {
+        path:'worksheet',
+        Component:WorkSheet,
+      }, 
+      {
+        path:'allemployeelist',
+        Component:AllEmployeeList,
+      }, 
+    ]
+  }
 ]);

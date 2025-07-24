@@ -35,9 +35,9 @@ const Login = () => {
         <hr className="my-4" />
          </form>
           <SocialLogin></SocialLogin>
-      <p className="mt-4 text-center">
-        New here? <Link to="/register">Register instead</Link>
-      </p>
+      <p className="text-center mt-4">
+             New to TaskMonitor? <Link className="text-blue-500 underline" to="/register">Register</Link>
+           </p>
     </div>
   );
 };

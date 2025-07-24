@@ -1,94 +1,119 @@
-
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
+import axios from 'axios';
+import useAuth from '../hooks/useAuth';
 import SocialLogin from '../Component/SocialLogin';
-
+import toast from 'react-hot-toast';
+import useAxios from '../Hooks/useAxios';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-
+  const { createuser, updateProfileInfo } = useAuth();
+  const axiosInstance = useAxios();
+  const location = useLocation();
   const navigate = useNavigate();
+  const from = location.state?.from?.pathname || '/';
 
-  
-  const onSubmit = data => {
-   console.log(data)
-   navigate("/")
+  const onSubmit = async (data) => {
+    // Password validation
+    if (!/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/.test(data.password)) {
+      toast.error('Password must be at least 6 characters, include a capital letter and a special character.');
+      return;
+    }
+    if (data.role === 'Admin') {
+      toast.error('Admin role cannot be selected.');
+      return;
+    }
+
+    // Upload image
+    let imageURL = '';
+    const imageFile = data.photo[0];
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      const imgUploadURL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_Upload_Key}`;
+      try {
+        const res = await axios.post(imgUploadURL, formData);
+        imageURL = res.data.data.url;
+      } catch (error) {
+        toast.error('Image upload failed.',+error.message);
+        return;
+      }
+    }
+
+    // Create user
+    try {
+      const result = await createuser(data.email, data.password);
+      console.log(result)
+
+      // Update profile
+      await updateProfileInfo({
+        displayName: data.name,
+        photoURL: imageURL
+      });
+
+      // to backend
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        role: data.role,
+        bank_account_no: data.bank_account_no,
+        salary: parseFloat(data.salary),
+        designation: data.designation,
+        photo: imageURL,
+        created_at: new Date().toISOString(),
+        last_log_in: new Date().toISOString()
+      };
+
+      await axiosInstance.post('/user', userInfo);
+      toast.success('Registration successful!');
+      navigate(from);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
-  
-
   return (
-    <div className="card mx-auto bg-lime-200 max-w-4xl p-6 shadow mt-2">
-      <h2 className="text-3xl mb-4 font-bold">Register</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <div className="max-w-md bg-lime-200 mx-auto p-5 shadow-md mb-3 rounded-xl">
+      <h2 className="text-2xl font-bold text-center mb-4">Register</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input {...register("name", { required: true })} type="text" placeholder="Full Name" className="input input-bordered w-full mb-3" />
+        {errors.name && <p className="text-red-500">Name is required</p>}
 
-        <div>
-          <label>Name</label>
-          <input {...register('name', { required: 'Name is required' })} type="text" className="input input-bordered w-full" />
-          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-        </div>
+        <input {...register("email", { required: true })} type="email" placeholder="Email" className="input input-bordered w-full mb-3" />
+        {errors.email && <p className="text-red-500">Email is required</p>}
 
-        <div>
-          <label>Email</label>
-          <input {...register('email', { required: 'Email required' })} type="email" className="input input-bordered w-full" />
-          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-        </div>
+        <input {...register("password", { required: true })} type="password" placeholder="Password" className="input input-bordered w-full mb-3" />
+        {errors.password && <p className="text-red-500">Password is required</p>}
 
-        <div>
-          <label>Password</label>
-          <input {...register('password', {
-            required: 'Password is required',
-            minLength: { value: 6, message: 'At least 6 characters' },
-            validate: {
-              hasUpper: v => /[A-Z]/.test(v) || 'Include uppercase',
-              hasSpecial: v => /[!@#$%^&*]/.test(v) || 'Include special character'
-            }
-          })} type="password" className="input input-bordered w-full" />
-          {errors.password && <p className="text-red-500">{errors.password.message}</p>}
-        </div>
+        <select {...register("role", { required: true })} className="select select-bordered w-full mb-3">
+          <option value="">Select Role</option>
+          <option value="Employee">Employee</option>
+          <option value="HR">HR</option>
+        </select>
+        {errors.role && <p className="text-red-500">Role is required</p>}
 
-        <div>
-          <label>Photo</label>
-          <input {...register('photo', { required: 'Photo required' })} type="file" accept="image/*" className="input w-full" />
-          {errors.photo && <p className="text-red-500">{errors.photo.message}</p>}
-        </div>
+        <input {...register("bank_account_no", { required: true })} type="text" placeholder="Bank Account Number" className="input input-bordered w-full mb-3" />
+        {errors.bank_account_no && <p className="text-red-500">Bank account number is required</p>}
 
-        <div>
-          <label>Role</label>
-          <select {...register('role', { required: 'Role is required' })} defaultValue="" className="select select-bordered w-full">
-            <option value="" disabled>Select role</option>
-            <option value="Employee">Employee</option>
-            <option value="HR">HR</option>
-          </select>
-          {errors.role && <p className="text-red-500">{errors.role.message}</p>}
-        </div>
+        <input {...register("salary", { required: true })} type="number" placeholder="Salary" className="input input-bordered w-full mb-3" />
+        {errors.salary && <p className="text-red-500">Salary is required</p>}
 
-        <div>
-          <label>Bank Account No.</label>
-          <input {...register('bank_account_no', { required: 'Bank account is required' })} type="text" className="input input-bordered w-full" />
-          {errors.bank_account_no && <p className="text-red-500">{errors.bank_account_no.message}</p>}
-        </div>
+        <input {...register("designation", { required: true })} type="text" placeholder="Designation" className="input input-bordered w-full mb-3" />
+        {errors.designation && <p className="text-red-500">Designation is required</p>}
 
-        <div>
-          <label>Salary</label>
-          <input {...register('salary', { required: 'Salary is required' })} type="number" className="input input-bordered w-full" />
-          {errors.salary && <p className="text-red-500">{errors.salary.message}</p>}
-        </div>
+        <input {...register("photo", { required: true })} type="file" accept="image/*" className="file-input file-input-bordered w-full mb-3" />
+        {errors.photo && <p className="text-red-500">Photo is required</p>}
 
-        <div>
-          <label>Designation</label>
-          <input {...register('designation', { required: 'Designation is required' })} type="text" className="input input-bordered w-full" />
-          {errors.designation && <p className="text-red-500">{errors.designation.message}</p>}
-        </div>
+        <button type="submit" className="btn btn-primary w-full mt-3">Register</button>
+      </form>
 
-        <button type="submit" className="btn btn-primary w-full">Register</button>
-
-        <hr className="my-4" />
-         </form>
-         <SocialLogin></SocialLogin>
-         <p className="mt-4 text-center">
-        Already Registered? <Link to="/login">Please Login</Link>
+      <p className="text-center mt-4">
+        Already have an account? <Link className="text-blue-500 underline" to="/login">Login</Link>
       </p>
+
+      <SocialLogin />
     </div>
   );
 };
