@@ -53,6 +53,12 @@ const DashboardLayout = () => {
                             WorkSheet
                         </NavLink>
                     </li>
+                    <li>
+                        <NavLink to='/dashboard/employeelist'>
+                            <FaBoxOpen className="inline-block mr-2"/>
+                            Employee List
+                        </NavLink>
+                    </li>
                    <li>
                         <NavLink to="/dashboard/allemployeelist">
                             <FaBoxOpen className="inline-block mr-2" />

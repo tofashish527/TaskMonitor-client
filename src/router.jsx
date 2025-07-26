@@ -12,6 +12,9 @@ import DashboardHome from "./Pages/DashBoard/DashboardHome";
 import PrivateRoute from "./Context/PrivateRoute";
 import DashboardLayout from "./Layout/DashboardLayout";
 import AllEmployeeList from "./Pages/DashBoard/AllEmployeeList";
+import EmployeeList from "./Pages/DashBoard/EmployeeList";
+import EmployeeDetails from "./Pages/DashBoard/EmployeeDetails";
+import Payment from "./Pages/DashBoard/Payment/Payment";
 
 
 export const router = createBrowserRouter([
@@ -58,9 +61,21 @@ export const router = createBrowserRouter([
         Component:WorkSheet,
       }, 
       {
+        path:'employeelist',
+        Component:EmployeeList,
+      },
+      {
+       path :"employee-details/:id", 
+       Component:EmployeeDetails,
+       } ,
+      {
         path:'allemployeelist',
         Component:AllEmployeeList,
       }, 
+      {
+        path:'payment/:id',
+        Component:Payment,
+      },
     ]
   }
 ]);
