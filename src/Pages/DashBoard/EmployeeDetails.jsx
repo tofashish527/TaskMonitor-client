@@ -3,23 +3,25 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import useAxios from "../../Hooks/useAxios";
+import useAuth from "../../hooks/useAuth";
 
 const EmployeeDetails = () => {
   const { id } = useParams();
+  const {user}=useAuth();
   const [employee, setEmployee] = useState(null);
   const [payroll, setPayroll] = useState([]);
   const axiosInstance = useAxios();
 useEffect(() => {
   const fetchDetails = async () => {
-    const empRes = await axiosInstance.get(`/user/${id}`);
+    const empRes = await axiosInstance.get(`/user/email/${user.email}`);
     setEmployee(empRes.data);
 
-    const payrollRes = await axiosInstance.get(`/payroll/${id}`);
-    const payrollWithLabels = payrollRes.data.map(entry => ({
+    const paychart = await axiosInstance.get(`/payments/${user.email}`);
+    const paychartWithLabels = paychart.data.map(entry => ({
       ...entry,
-      label: `${entry.month} ${entry.year}` // Add this
+      label: `${entry.salaryMonth} ${entry.salaryYear}` // Add this
     }));
-    setPayroll(payrollWithLabels);
+    setPayroll(paychartWithLabels);
   };
   fetchDetails();
 }, [id]);
@@ -44,14 +46,46 @@ useEffect(() => {
       <div>
         <h3 className="text-xl font-semibold mb-2">Salary History</h3>
         {payroll.length > 0 ? (
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={payroll}>
-              <XAxis dataKey={(entry) => `${entry.month} ${entry.year}`} />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="salary" fill="#4f46e5" />
-            </BarChart>
-          </ResponsiveContainer>
+//           <ResponsiveContainer width="100%" height={300}>
+//             <BarChart data={payroll}>
+//               <XAxis dataKey="label" label={{ value: 'Month, Year', position: 'insideBottom', offset: -5 }} />
+//   <YAxis label={{ value: 'Salary', angle: -90, position: 'insideLeft' }} />
+//               <Tooltip />
+//               <Bar dataKey="salary" fill="#4f46e5" />
+//             </BarChart>
+//           </ResponsiveContainer>
+<ResponsiveContainer width="100%" height={300}>
+  <BarChart
+    data={payroll}
+    margin={{ top: 20, right: 30, left: 20, bottom: 50 }} // more spacing
+    barCategoryGap={80} // increase gap between bars
+    barSize={60} // widen each bar
+  >
+    <XAxis
+      dataKey="label"
+      label={{
+        value: 'Month, Year',
+        position: 'insideBottom',
+        offset: -40,
+        style: { textAnchor: "middle", fontSize: 14 }
+      }}
+      angle={-25} // slanted labels for clarity
+      textAnchor="end"
+      interval={0}
+    />
+    <YAxis
+      label={{
+        value: 'Salary Amount',
+        angle: -90,
+        position: 'insideLeft',
+        style: { textAnchor: "middle", fontSize: 14 }
+      }}
+    />
+    <Tooltip />
+    <Bar dataKey="salary" fill="#4f46e5" radius={[4, 4, 0, 0]} />
+  </BarChart>
+</ResponsiveContainer>
+
         ) : (
           <p className="text-gray-500">No payroll data found.</p>
         )}

@@ -49,20 +49,19 @@ const navigate = useNavigate();
     }
   };
 
-  const openPayModal = async(employee) => {
+  const openPayModal = async (employee) => {
     setSelectedEmployee(employee);
     setPayMonth("");
     setPayYear("");
     setPayModalOpen(true);
-
-    
-  try {
-    const res = await axiosInstance.get(`/payroll/${employee._id}`);
-    setExistingPayroll(res.data); // List of payrolls for this employee
-  } catch (err) {
-    console.error("Failed to fetch payroll", err);
-    setExistingPayroll([]);
-  }
+    try {
+      // Fetch payroll/payment history for this employee by email (lowercase)
+      const res = await axiosInstance.get(`/payments?email=${encodeURIComponent(employee.email.toLowerCase())}`);
+      setExistingPayroll(res.data); // List of payrolls for this employee
+    } catch (err) {
+      console.error("Failed to fetch payroll", err);
+      setExistingPayroll([]);
+    }
   };
 
 
@@ -71,12 +70,21 @@ const handlePaymentRequest = () => {
     return Swal.fire("Error", "Please enter both month and year", "warning");
   }
 
+  // Check if already paid for this month/year (case-insensitive, robust)
   const alreadyPaid = existingPayroll.find(
-    (entry) => entry.month === payMonth && entry.year === Number(payYear)
+    (entry) => {
+      // Support both possible field names from backend: month/year or salaryMonth/salaryYear
+      const entryMonth = entry.month || entry.salaryMonth;
+      const entryYear = entry.year || entry.salaryYear;
+      return (
+        String(entryMonth).toLowerCase() === payMonth.toLowerCase() &&
+        String(entryYear) === String(payYear)
+      );
+    }
   );
 
   if (alreadyPaid) {
-    return Swal.fire("Warning", "Salary already paid for this month & year", "warning");
+    return Swal.fire("Warning", "Salary already paid for this month & year! You can’t pay an employee twice for the same period.", "warning");
   }
 
   // Close modal and navigate to payment gateway
@@ -130,7 +138,7 @@ const handlePaymentRequest = () => {
                 </td>
                 <td className="space-x-1">
                   <Link
-                    to={`/dashboard/employee-details/${emp._id}`}
+                    to={`/dashboard/employee-details/${emp.email.toLowerCase()}`}
                     className="btn btn-xs btn-outline"
                   >
                     View
@@ -158,69 +166,70 @@ const handlePaymentRequest = () => {
 
       {/* Payment Modal */}
       <Modal
-        isOpen={payModalOpen}
-        onRequestClose={() => setPayModalOpen(false)}
-        className="max-w-md mx-auto mt-20 p-6 bg-white rounded shadow-lg relative"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start z-50"
-      >
-        <button
-          onClick={() => setPayModalOpen(false)}
-          className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-2xl font-bold leading-none"
-        >
-          &times;
-        </button>
-        <h2 className="text-xl font-semibold mb-4">
-          Payment for {selectedEmployee?.name}
-        </h2>
-        <p className="mb-2">
-          <strong>Salary:</strong> ${selectedEmployee?.salary}
-        </p>
-        <div className="mb-4">
-          <label className="block mb-1 font-medium" htmlFor="payMonth">
-            Month
-          </label>
-          <select
-            id="payMonth"
-            value={payMonth}
-            onChange={(e) => setPayMonth(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-          >
-            <option value="">Select month</option>
-            {MONTHS.map((month) => (
-              <option key={month} value={month}>
-                {month}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1 font-medium" htmlFor="payYear">
-            Year
-          </label>
-          <input
-            id="payYear"
-            type="number"
-            value={payYear}
-            onChange={(e) => setPayYear(e.target.value)}
-            placeholder={new Date().getFullYear()}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-        <div className="flex justify-end gap-4">
-          <button
-            onClick={() => setPayModalOpen(false)}
-            className="btn btn-outline"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handlePaymentRequest}
-            className="btn btn-success text-white"
-          >
-            Submit
-          </button>
-        </div>
-      </Modal>
+  isOpen={payModalOpen}
+  onRequestClose={() => setPayModalOpen(false)}
+  className="max-w-md mx-auto mt-20 p-6 bg-white rounded shadow-lg relative"
+  overlayClassName="fixed inset-0 bg-black/10 backdrop-blur-sm flex justify-center items-start z-50"
+>
+  <button
+    onClick={() => setPayModalOpen(false)}
+    className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-2xl font-bold leading-none"
+  >
+    &times;
+  </button>
+  <h2 className="text-xl font-semibold mb-4">
+    Payment for {selectedEmployee?.name}
+  </h2>
+  <p className="mb-2">
+    <strong>Salary:</strong> ${selectedEmployee?.salary}
+  </p>
+  <div className="mb-4">
+    <label className="block mb-1 font-medium" htmlFor="payMonth">
+      Month
+    </label>
+    <select
+      id="payMonth"
+      value={payMonth}
+      onChange={(e) => setPayMonth(e.target.value)}
+      className="w-full border px-3 py-2 rounded"
+    >
+      <option value="">Select month</option>
+      {MONTHS.map((month) => (
+        <option key={month} value={month}>
+          {month}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div className="mb-4">
+    <label className="block mb-1 font-medium" htmlFor="payYear">
+      Year
+    </label>
+    <input
+      id="payYear"
+      type="number"
+      value={payYear}
+      onChange={(e) => setPayYear(e.target.value)}
+      placeholder={new Date().getFullYear()}
+      className="w-full border px-3 py-2 rounded"
+    />
+  </div>
+  <div className="flex justify-end gap-4">
+    <button
+      onClick={() => setPayModalOpen(false)}
+      className="btn btn-outline"
+    >
+      Cancel
+    </button>
+    <button
+      onClick={handlePaymentRequest}
+      className="btn btn-success text-white"
+    >
+      Submit
+    </button>
+  </div>
+</Modal>
+
     </div>
   );
 };

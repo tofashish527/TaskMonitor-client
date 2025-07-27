@@ -22,7 +22,7 @@ const SocialLogin = () => {
           email: user.email,
           role: 'Employee',
           bank_account_no: '98631345679',
-          salary: 30000,
+          salary: 300,
           designation: 'Executive Manager',
           photo: user.photoURL || '',
           created_at: new Date().toISOString(),

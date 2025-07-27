@@ -41,6 +41,7 @@ const WorkSheet = () => {
       name: user.displayName, 
       email: user.email,
       hours: Number(form.hours),
+      date: form.date instanceof Date ? form.date.toISOString() : new Date(form.date).toISOString(),
     };
 
     try {
@@ -74,6 +75,7 @@ const WorkSheet = () => {
         ...editing,
         hours: Number(editing.hours),
         email: user.email,
+        date: editing.date instanceof Date ? editing.date.toISOString() : new Date(editing.date).toISOString(),
       };
       await axiosInstance.put(`/worksheet/${editing._id}`, updated);
       setTasks((prev) =>
