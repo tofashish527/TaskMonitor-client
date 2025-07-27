@@ -73,7 +73,7 @@ export const router = createBrowserRouter([
         Component:AllEmployeeList,
       }, 
       {
-        path:'payment/:id',
+        path:'payment/:user_id',
         Component:Payment,
       },
     ]

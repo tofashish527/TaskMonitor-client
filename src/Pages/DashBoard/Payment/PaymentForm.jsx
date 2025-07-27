@@ -1,3 +1,6 @@
+
+
+
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
@@ -10,6 +13,7 @@ const PaymentForm = () => {
     const stripe = useStripe();
     const elements = useElements();
     const { user_id } = useParams();
+    console.log('user_id:', user_id);
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
@@ -17,10 +21,10 @@ const PaymentForm = () => {
     const [error, setError] = useState('');
 
 
-    const { isPending, data: parcelInfo = {} } = useQuery({
-        queryKey: ['user', user?.email],
+    const { isPending, data: salaryInfo = {} } = useQuery({
+        queryKey: ['user', user?.email?.toLowerCase()],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/user/email/${user.email}`);
+            const res = await axiosSecure.get(`/user/email/${user.email.toLowerCase()}`);
             return res.data;
         }
     })
@@ -29,10 +33,14 @@ const PaymentForm = () => {
         return '...loading'
     }
 
-    console.log(parcelInfo)
-    const amount = parcelInfo.cost;
-    const amountInCents = amount * 100;
-    console.log(amountInCents);
+    console.log(salaryInfo)
+    const amount = salaryInfo.salary;
+    const account=salaryInfo.bank_account_no;
+    const email=salaryInfo.email;
+    const name=salaryInfo.name;
+    const designation=salaryInfo.designation;
+    const role=salaryInfo.role;
+    console.log(amount,account);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -60,10 +68,14 @@ const PaymentForm = () => {
             console.log('payment method', paymentMethod);
 
             // step-2: create payment intent
+            // const res = await axiosSecure.post('/create-payment-intent', {
+            //     amount,
+            //     user_id
+            // })
             const res = await axiosSecure.post('/create-payment-intent', {
-                amountInCents,
-                user_id
-            })
+  amount: Math.round(amount *100), // convert to cents
+  user_id
+});  
 
             const clientSecret = res.data.clientSecret;
 
@@ -87,7 +99,7 @@ const PaymentForm = () => {
                     const transactionId = result.paymentIntent.id;
                     // step-4 mark parcel paid also create payment history
                     const paymentData = {
-                        user_id,
+                        empID: user_id,
                         email: user.email,
                         amount,
                         transactionId: transactionId,
@@ -122,12 +134,18 @@ const PaymentForm = () => {
 
 return (
     <div>
-        <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-xl shadow-md w-full max-w-md mx-auto">
-            <CardElement className="p-2 border rounded">
-            </CardElement>
+        <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 mt-10 rounded-xl shadow-md w-full max-w-md mx-auto">
+            <CardElement className="p-2 border rounded"/>
+            <div className='text-black'>
+                <span className='text-lime-700 text-xl font-bold'>Employee Info : </span><br></br>
+                Name : {name}<br></br>
+                Email : {email}<br></br>
+                Designation : {designation}<br></br>
+                Role : {role}
+            </div>
             <button
                 type='submit'
-                className="btn btn-primary text-black w-full"
+                className="btn btn-primary text-white w-full"
                 disabled={!stripe}
             >
                 Pay ${amount}

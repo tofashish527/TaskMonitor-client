@@ -38,6 +38,7 @@ const WorkSheet = () => {
 
     const newTask = {
       ...form,
+      name: user.displayName, 
       email: user.email,
       hours: Number(form.hours),
     };

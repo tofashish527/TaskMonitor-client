@@ -65,6 +65,12 @@ const DashboardLayout = () => {
                             All Emplyee List
                         </NavLink>
                     </li>
+                    <li>
+                        <NavLink to="/dashboard/progress">
+                            <FaBoxOpen className="inline-block mr-2" />
+                           Progress
+                        </NavLink>
+                    </li>
                    
 
                  
