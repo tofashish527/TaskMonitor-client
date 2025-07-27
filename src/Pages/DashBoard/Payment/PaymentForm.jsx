@@ -4,7 +4,7 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import Swal from 'sweetalert2';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
@@ -17,6 +17,8 @@ const PaymentForm = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
+    const location = useLocation();
+const { month, year } = location.state || {};
 
     const [error, setError] = useState('');
 
@@ -103,7 +105,9 @@ const PaymentForm = () => {
                         email: user.email,
                         amount,
                         transactionId: transactionId,
-                        paymentMethod: result.paymentIntent.payment_method_types
+                        paymentMethod: result.paymentIntent.payment_method_types,
+                         salaryMonth: month,
+                         salaryYear: year,
                     }
 
                     const paymentRes = await axiosSecure.post('/payments', paymentData);

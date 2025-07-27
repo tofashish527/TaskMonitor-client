@@ -15,6 +15,7 @@ import AllEmployeeList from "./Pages/DashBoard/AllEmployeeList";
 import EmployeeList from "./Pages/DashBoard/EmployeeList";
 import EmployeeDetails from "./Pages/DashBoard/EmployeeDetails";
 import Payment from "./Pages/DashBoard/Payment/Payment";
+import PaymentHistory from "./Pages/DashBoard/Payment/PaymentHistory";
 
 
 export const router = createBrowserRouter([
@@ -75,6 +76,10 @@ export const router = createBrowserRouter([
       {
         path:'payment/:user_id',
         Component:Payment,
+      },
+        {
+        path: "paymenthistory",
+        element:<PaymentHistory />
       },
     ]
   }
