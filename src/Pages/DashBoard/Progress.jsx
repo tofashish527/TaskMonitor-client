@@ -75,7 +75,7 @@ const Progress = () => {
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Employee Progress</h2>
 
-      {/* 🟩 Filter Controls */}
+     
       <div className="flex flex-wrap gap-4 mb-6">
         <select
           className="border px-3 py-2 rounded"
@@ -117,12 +117,12 @@ const Progress = () => {
         </select>
       </div>
 
-      {/* 🟩 Total Hours */}
+
       <div className="mb-4 text-lg font-semibold">
         Total Work Hours: <span className="text-blue-600">{totalHours}</span>
       </div>
 
-      {/* 🟩 Data Table */}
+      
       <div className="overflow-x-auto">
         <table className="min-w-full border">
           <thead className="bg-gray-100 text-left">

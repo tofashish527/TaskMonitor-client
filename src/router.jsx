@@ -17,6 +17,8 @@ import EmployeeDetails from "./Pages/DashBoard/EmployeeDetails";
 import Payment from "./Pages/DashBoard/Payment/Payment";
 import PaymentHistory from "./Pages/DashBoard/Payment/PaymentHistory";
 import Progress from "./Pages/DashBoard/Progress";
+import HRRoute from "./Context/HRRoute";
+import AdminRoute from "./Context/AdminRoute";
 
 
 export const router = createBrowserRouter([
@@ -64,15 +66,15 @@ export const router = createBrowserRouter([
       }, 
       {
         path:'employeelist',
-        Component:EmployeeList,
+        element:<HRRoute><EmployeeList></EmployeeList></HRRoute>
       },
       {
-       path :"employee-details/:id", 
-       Component:EmployeeDetails,
+       path :"employee-details/:email", 
+       element:<HRRoute><EmployeeDetails></EmployeeDetails></HRRoute>
        } ,
       {
         path:'allemployeelist',
-        Component:AllEmployeeList,
+        element:<AdminRoute><AllEmployeeList/></AdminRoute>
       }, 
       {
         path:'payment/:user_id',
@@ -85,7 +87,7 @@ export const router = createBrowserRouter([
       
         {
         path: "progress",
-        element:<Progress></Progress>
+        element:<HRRoute><Progress></Progress></HRRoute>
       },
     ]
   }

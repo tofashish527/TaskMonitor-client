@@ -3,29 +3,48 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import useAxios from "../../Hooks/useAxios";
-import useAuth from "../../hooks/useAuth";
+//import useAuth from "../../hooks/useAuth";
 
 const EmployeeDetails = () => {
-  const { id } = useParams();
-  const {user}=useAuth();
+  const { email } = useParams();
+  //const {user}=useAuth();
   const [employee, setEmployee] = useState(null);
   const [payroll, setPayroll] = useState([]);
   const axiosInstance = useAxios();
+
+// useEffect(() => {
+//   const fetchDetails = async () => {
+//     const empRes = await axiosInstance.get(`/user/email/${user.email}`);
+//     setEmployee(empRes.data);
+
+//     const paychart = await axiosInstance.get(`/payments/${user.email}`);
+//     const paychartWithLabels = paychart.data.map(entry => ({
+//       ...entry,
+//       label: `${entry.salaryMonth} ${entry.salaryYear}` // Add this
+//     }));
+//     setPayroll(paychartWithLabels);
+//   };
+//   fetchDetails();
+// }, [id]);
+
 useEffect(() => {
-  const fetchDetails = async () => {
-    const empRes = await axiosInstance.get(`/user/email/${user.email}`);
-    setEmployee(empRes.data);
+    const fetchDetails = async () => {
+      try {
+        const empRes = await axiosInstance.get(`/user/email/${email}`); // 👈 FIXED
+        setEmployee(empRes.data);
 
-    const paychart = await axiosInstance.get(`/payments/${user.email}`);
-    const paychartWithLabels = paychart.data.map(entry => ({
-      ...entry,
-      label: `${entry.salaryMonth} ${entry.salaryYear}` // Add this
-    }));
-    setPayroll(paychartWithLabels);
-  };
-  fetchDetails();
-}, [id]);
-
+        const paychart = await axiosInstance.get(`/payments/${email}`); // 👈 FIXED
+        const paychartWithLabels = paychart.data.map(entry => ({
+          ...entry,
+          label: `${entry.salaryMonth} ${entry.salaryYear}`
+        }));
+        setPayroll(paychartWithLabels);
+      } catch (err) {
+        console.error("Error fetching employee details", err);
+      }
+    };
+    fetchDetails();
+  }, [email]); 
 
   if (!employee) return <div className="text-center mt-20">Loading...</div>;
 

@@ -92,7 +92,6 @@ const WorkSheet = () => {
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Work Sheet</h2>
 
-      {/* 📌 Inline form */}
       <form onSubmit={handleSubmit} className="flex flex-wrap items-center gap-2 mb-6">
         <select
           name="task"
@@ -126,7 +125,6 @@ const WorkSheet = () => {
         <button type="submit" className="btn btn-primary">Add</button>
       </form>
 
-      {/* 📌 Table */}
       <div className="overflow-x-auto">
         <table className="table table-zebra w-full">
           <thead>
@@ -153,7 +151,7 @@ const WorkSheet = () => {
         </table>
       </div>
 
-      {/* 📌 Edit Modal */}
+      
       {editing && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-4 rounded w-full max-w-md">

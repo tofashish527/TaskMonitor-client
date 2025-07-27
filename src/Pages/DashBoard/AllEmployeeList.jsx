@@ -14,7 +14,7 @@ const AllEmployeeList = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/user")
+      .get("/employees")
       .then((res) => setEmployees(res.data))
       .catch((err) => console.error(err));
   }, []);

@@ -28,7 +28,7 @@ const navigate = useNavigate();
   } = useQuery({
     queryKey: ['employees'],
     queryFn: async () => {
-      const res = await axiosInstance.get("/user");
+      const res = await axiosInstance.get("/employees");
       return res.data;
     },
   });

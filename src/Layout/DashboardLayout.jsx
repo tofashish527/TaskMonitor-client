@@ -2,8 +2,12 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router';
 import { FaHome, FaBoxOpen, FaMoneyCheckAlt, FaUserEdit } from 'react-icons/fa';
 import Logo from '../Shared/Logo';
+import useUserRole from '../Hooks/useUserRole';
 
 const DashboardLayout = () => {
+    
+     const { role, roleLoading } = useUserRole();
+    console.log(role);
     return (
         <div className="drawer lg:drawer-open">
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -47,6 +51,7 @@ const DashboardLayout = () => {
                             Home
                         </NavLink>
                     </li>
+                    {!roleLoading && role === 'Employee' && <>
                     <li>
                         <NavLink to="/dashboard/worksheet">
                             <FaBoxOpen className="inline-block mr-2" />
@@ -54,29 +59,39 @@ const DashboardLayout = () => {
                         </NavLink>
                     </li>
                     <li>
+                        <NavLink to="/dashboard/paymenthistory">
+                            <FaMoneyCheckAlt className="inline-block mr-2" />
+                            Payment History
+                        </NavLink>
+                    </li>
+                    </>
+                    }
+                    {!roleLoading && role === 'HR' && <>
+                    <li>
                         <NavLink to='/dashboard/employeelist'>
                             <FaBoxOpen className="inline-block mr-2"/>
                             Employee List
                         </NavLink>
                     </li>
+                      <li>
+                        <NavLink to="/dashboard/progress">
+                            <FaBoxOpen className="inline-block mr-2" />
+                           Progress
+                        </NavLink>
+                    </li>
+                    </>
+                    }
+                     {!roleLoading && role === 'Admin' && <>
                    <li>
                         <NavLink to="/dashboard/allemployeelist">
                             <FaBoxOpen className="inline-block mr-2" />
                             All Emplyee List
                         </NavLink>
                     </li>
-                    <li>
-                        <NavLink to="/dashboard/progress">
-                            <FaBoxOpen className="inline-block mr-2" />
-                           Progress
-                        </NavLink>
-                    </li>
-                      <li>
-                        <NavLink to="/dashboard/paymenthistory">
-                            <FaMoneyCheckAlt className="inline-block mr-2" />
-                            Payment History
-                        </NavLink>
-                    </li>
+                    </>
+}
+                  
+                      
                    
 
                  
