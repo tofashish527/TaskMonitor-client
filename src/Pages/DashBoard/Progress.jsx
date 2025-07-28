@@ -14,7 +14,7 @@ const Progress = () => {
 
   // Load employee list on mount
   useEffect(() => {
-    axiosInstance.get("/employees").then((res) => {
+    axiosInstance.get("/employeesP").then((res) => {
       setEmployees(res.data || []);
     });
   }, []);

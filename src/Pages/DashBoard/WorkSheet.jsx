@@ -22,7 +22,7 @@ const WorkSheet = () => {
   useEffect(() => {
     if (!user?.email) return;
     axiosInstance
-      .get(`/worksheet?email=${user.email}`)
+      .get(`/worksheet/${user.email}`)
       .then((res) => setTasks(res.data))
       .catch(() => toast.error("Failed to fetch worksheet data"));
   }, [user, axiosInstance]);
