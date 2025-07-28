@@ -52,7 +52,7 @@ useEffect(() => {
     <div className="max-w-3xl mx-auto p-6 space-y-6">
       <div className="flex items-center gap-6">
         <img
-          src={employee.photoURL || "https://via.placeholder.com/100"}
+          src={employee.photoURL}
           alt={employee.name}
           className="w-24 h-24 rounded-full border shadow"
         />
@@ -65,14 +65,6 @@ useEffect(() => {
       <div>
         <h3 className="text-xl font-semibold mb-2">Salary History</h3>
         {payroll.length > 0 ? (
-//           <ResponsiveContainer width="100%" height={300}>
-//             <BarChart data={payroll}>
-//               <XAxis dataKey="label" label={{ value: 'Month, Year', position: 'insideBottom', offset: -5 }} />
-//   <YAxis label={{ value: 'Salary', angle: -90, position: 'insideLeft' }} />
-//               <Tooltip />
-//               <Bar dataKey="salary" fill="#4f46e5" />
-//             </BarChart>
-//           </ResponsiveContainer>
 <ResponsiveContainer width="100%" height={300}>
   <BarChart
     data={payroll}

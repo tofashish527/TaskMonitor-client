@@ -19,6 +19,7 @@ import PaymentHistory from "./Pages/DashBoard/Payment/PaymentHistory";
 import Progress from "./Pages/DashBoard/Progress";
 import HRRoute from "./Context/HRRoute";
 import AdminRoute from "./Context/AdminRoute";
+import Payroll from "./Pages/DashBoard/Payroll";
 
 
 export const router = createBrowserRouter([
@@ -83,6 +84,10 @@ export const router = createBrowserRouter([
         {
         path: "paymenthistory",
         element:<PaymentHistory />
+      },
+      {
+        path: "payroll",
+        element:<Payroll></Payroll>
       },
       
         {

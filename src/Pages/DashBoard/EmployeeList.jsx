@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import useAxios from "../../Hooks/useAxios";
-import { Link, useNavigate } from "react-router";
+import { Link} from "react-router";
 
 Modal.setAppElement("#root");
 
@@ -14,7 +14,7 @@ const MONTHS = [
 
 const EmployeeList = () => {
     
-const navigate = useNavigate();
+//const navigate = useNavigate();
   const axiosInstance = useAxios();
   const [payModalOpen, setPayModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -28,7 +28,7 @@ const navigate = useNavigate();
   } = useQuery({
     queryKey: ['employees'],
     queryFn: async () => {
-      const res = await axiosInstance.get("/employees");
+      const res = await axiosInstance.get("/employees/hr");
       return res.data;
     },
   });
@@ -64,43 +64,82 @@ const navigate = useNavigate();
     }
   };
 
-
-const handlePaymentRequest = () => {
+  const handlePaymentRequest = async () => {
   if (!payMonth || !payYear) {
     return Swal.fire("Error", "Please enter both month and year", "warning");
   }
 
-  // Check if already paid for this month/year (case-insensitive, robust)
-  const alreadyPaid = existingPayroll.find(
-    (entry) => {
-      // Support both possible field names from backend: month/year or salaryMonth/salaryYear
-      const entryMonth = entry.month || entry.salaryMonth;
-      const entryYear = entry.year || entry.salaryYear;
-      return (
-        String(entryMonth).toLowerCase() === payMonth.toLowerCase() &&
-        String(entryYear) === String(payYear)
-      );
-    }
-  );
+  const alreadyPaid = existingPayroll.find((entry) => {
+    const entryMonth = entry.month || entry.salaryMonth;
+    const entryYear = entry.year || entry.salaryYear;
+    return (
+      String(entryMonth).toLowerCase() === payMonth.toLowerCase() &&
+      String(entryYear) === String(payYear)
+    );
+  });
 
   if (alreadyPaid) {
-    return Swal.fire("Warning", "Salary already paid for this month & year! You can’t pay an employee twice for the same period.", "warning");
+    return Swal.fire(
+      "Warning",
+      "Salary already paid for this month & year!",
+      "warning"
+    );
   }
 
-  // Close modal and navigate to payment gateway
-  setPayModalOpen(false);
-
-  navigate(`/dashboard/payment/${selectedEmployee._id}`, {
-    state: {
+  try {
+    await axiosInstance.post("/payroll/request", {
       userId: selectedEmployee._id,
       name: selectedEmployee.name,
       email: selectedEmployee.email,
       salary: selectedEmployee.salary,
       month: payMonth,
       year: Number(payYear),
-    },
-  });
+    });
+
+    setPayModalOpen(false);
+    Swal.fire("Success", "Payment request sent to Payroll.", "success");
+  } catch (err) {
+    console.error(err);
+    Swal.fire("Error", "Failed to send payment request.", "error");
+  }
 };
+
+// const handlePaymentRequest = () => {
+//   if (!payMonth || !payYear) {
+//     return Swal.fire("Error", "Please enter both month and year", "warning");
+//   }
+
+//   // Check if already paid for this month/year (case-insensitive, robust)
+//   const alreadyPaid = existingPayroll.find(
+//     (entry) => {
+//       // Support both possible field names from backend: month/year or salaryMonth/salaryYear
+//       const entryMonth = entry.month || entry.salaryMonth;
+//       const entryYear = entry.year || entry.salaryYear;
+//       return (
+//         String(entryMonth).toLowerCase() === payMonth.toLowerCase() &&
+//         String(entryYear) === String(payYear)
+//       );
+//     }
+//   );
+
+//   if (alreadyPaid) {
+//     return Swal.fire("Warning", "Salary already paid for this month & year! You can’t pay an employee twice for the same period.", "warning");
+//   }
+
+//   // Close modal and navigate to payment gateway
+//   setPayModalOpen(false);
+
+//   navigate(`/dashboard/payment/${selectedEmployee._id}`, {
+//     state: {
+//       userId: selectedEmployee._id,
+//       name: selectedEmployee.name,
+//       email: selectedEmployee.email,
+//       salary: selectedEmployee.salary,
+//       month: payMonth,
+//       year: Number(payYear),
+//     },
+//   });
+// };
   return (
     <div className="overflow-x-auto shadow-md rounded-xl p-6">
       <h2 className="text-2xl font-bold mb-4">Employee List (HR)</h2>
