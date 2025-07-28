@@ -28,6 +28,10 @@ const Register = () => {
 
     // Upload image
     let imageURL = '';
+    if (!data.photo || data.photo.length === 0) {
+  toast.error("Photo is missing.");
+  return;
+}
     const imageFile = data.photo[0];
     if (imageFile) {
       const formData = new FormData();
@@ -47,6 +51,7 @@ const Register = () => {
       const result = await createuser(data.email, data.password);
       console.log(result)
 
+      console.log(data.email,data.password)
       // Update profile
       await updateProfileInfo({
         displayName: data.name,

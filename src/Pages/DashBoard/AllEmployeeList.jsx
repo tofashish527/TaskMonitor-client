@@ -1,3 +1,5 @@
+
+
 import { useEffect, useState } from "react";
 import { FaEdit, FaTimesCircle } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -46,10 +48,10 @@ const AllEmployeeList = () => {
 
   const handleMakeHR = async (id) => {
     try {
-      await axiosInstance.put(`/user/make-hr/${id}`);
+      await axiosInstance.put(`/user/promote/${id}`);
       setEmployees((prev) =>
         prev.map((emp) =>
-          emp._id === id ? { ...emp, role: "hr" } : emp
+          emp._id === id ? { ...emp, role: "HR" } : emp
         )
       );
       Swal.fire("Success", "User promoted to HR", "success");
@@ -141,7 +143,7 @@ const AllEmployeeList = () => {
                         size={20}
                         title="Fired"
                       />
-                    ) : emp.role === "employee" ? (
+                    ) : emp.role === "Employee" ? (
                       <button
                         onClick={() => handleMakeHR(emp._id)}
                         className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded"
@@ -206,7 +208,7 @@ const AllEmployeeList = () => {
                     size={20}
                     title="Fired"
                   />
-                ) : emp.role === "employee" ? (
+                ) : emp.role === "Employee" ? (
                   <button
                     onClick={() => handleMakeHR(emp._id)}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
@@ -283,4 +285,3 @@ const AllEmployeeList = () => {
 };
 
 export default AllEmployeeList;
-
