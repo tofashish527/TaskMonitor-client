@@ -1,140 +1,169 @@
-import React, { useState, useEffect } from "react";
-import { FaArrowLeft, FaArrowRight, FaQuoteLeft } from "react-icons/fa";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import React from 'react';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const testimonials = [
   {
-    text: "ProFast delivery exceeded my expectations. Seamless service!",
-    name: "Rafiq Ahmed",
-    position: "Warehouse Manager",
-
+    id: 1,
+    name: 'Sarah Johnson',
+    title: 'Marketing Manager at NovaCorp',
+    quote: 'Their service was a game-changer for our growth. Exceptional support and lightning-fast response times!',
   },
   {
-    text: "Our business grew fast thanks to their reliable distribution.",
-    name: "Lubna Chowdhury",
-    position: "Startup Founder",
-   
+    id: 2,
+    name: 'James Lee',
+    title: 'CTO of DevSpark',
+    quote: 'The professionalism and attention to detail have been unmatched. We’re proud to be long-term partners.',
   },
   {
-    text: "I love the way ProFast handles same-day deliveries.",
-    name: "Shafiul Alam",
-    position: "Store Owner",
-   
+    id: 3,
+    name: 'Anita Desai',
+    title: 'Founder, GreenEarth',
+    quote: 'Absolutely incredible team to work with! They’ve helped us scale sustainably and efficiently.',
   },
   {
-    text: "Friendly riders, timely service – highly recommended.",
-    name: "Farzana Hossain",
-    position: "Freelancer",
-  
-  },
-  {
-    text: "ProFast is now our official logistics partner nationwide.",
-    name: "Hasibul Rahman",
-    position: "Corporate Manager",
-   
-  },
-  {
-    text: "They helped me reach rural customers reliably!",
-    name: "Mim Zaman",
-    position: "Facebook Seller",
-   
-  },
+  id: 4,
+  name: 'Michael Thompson',
+  title: 'CEO, TechSolutions',
+  quote: 'Their innovative approach and dedication have transformed the way we handle logistics. Truly outstanding service.',
+},
+{
+  id: 5,
+  name: 'Priya Singh',
+  title: 'Operations Head, FreshFarm',
+  quote: 'Reliable, efficient, and customer-focused — the team always goes above and beyond to deliver excellence.',
+},
+{
+  id: 6,
+  name: 'Carlos Mendez',
+  title: 'Supply Chain Manager, GlobalGoods',
+  quote: 'Professional and responsive, they have been an integral part of our growth strategy with their seamless support.',
+},
 ];
 
+// Replace with your large left-side image URL
+const leftSideImage = 'https://i.ibb.co/GvmPr9hy/photo-1522202176988-66273c2fd55f-auto-format-fit-crop-w-800-q-80.jpg';
+
 const Testimonials = () => {
-  const [current, setCurrent] = useState(0);
-
-  const prev = () =>
-    setCurrent((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
-  const next = () =>
-    setCurrent((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
-
-  const getIndex = (offset) =>
-    (current + offset + testimonials.length) % testimonials.length;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    AOS.init({ duration: 800 });
-  }, []);
-
   return (
-    <section className="py-16 px-4 lg:px-20 bg-base-100 text-center relative">
-      <div className="max-w-3xl mx-auto mb-10">
-        <h2 className="text-3xl font-bold mb-3">
-          What Our Clients Say About Us
-        </h2>
-        <p className="text-gray-600">
-          Trusted by hundreds of businesses across Bangladesh for fast and
-          reliable logistics. Hear directly from our valued clients.
-        </p>
-      </div>
+    <div className="bg-gray-50 py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="flex flex-col lg:flex-row items-center gap-12">
+        {/* Left side large image */}
+        <div className="flex-shrink-0 w-full lg:w-1/2">
+          <img
+            src={leftSideImage}
+            alt="Happy customers"
+            className="rounded-lg object-cover w-full h-[450px] lg:h-full"
+          />
+        </div>
 
-      <div className="flex justify-center items-center gap-6 relative">
-        <div
-          className="w-[300px] transform scale-90 opacity-40 transition-all duration-300"
-          data-aos="flip-left"
-        >
-          <TestimonialCard testimonial={testimonials[getIndex(-1)]} />
-        </div>
-        <div
-          className="w-[340px] transform scale-100 opacity-100 z-10 transition-all duration-300"
-          data-aos="flip-left"
-        >
-          <TestimonialCard testimonial={testimonials[getIndex(0)]} />
-        </div>
-        <div
-          className="w-[300px] transform scale-90 opacity-40 transition-all duration-300"
-          data-aos="flip-left"
-        >
-          <TestimonialCard testimonial={testimonials[getIndex(1)]} />
-        </div>
-      </div>
+        {/* Right side testimonial section */}
+        <div className="w-full lg:w-1/2">
+          <div className="text-center lg:text-left max-w-xl mx-auto lg:mx-0">
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">What Our Clients Say</h2>
+            <p className="text-lg text-gray-600 mb-12">
+              Hear directly from our partners and clients around the world.
+            </p>
 
-      <div className="mt-8 flex justify-center items-center gap-6">
-        <button
-          onClick={prev}
-          className="btn btn-sm btn-outline text-primary rounded-full"
-        >
-          <FaArrowLeft />
-        </button>
-        <div className="flex gap-2">
-          {testimonials.map((_, index) => (
-            <span
-              key={index}
-              className={`h-2 w-2 rounded-full transition-all duration-300 ${
-                index === current ? "bg-primary scale-125" : "bg-gray-300"
-              }`}
-            ></span>
-          ))}
+            <Carousel
+              autoPlay
+              infiniteLoop
+              showThumbs={false}
+              showStatus={false}
+              showIndicators={true}
+              interval={5000}
+              transitionTime={700}
+              swipeable
+              emulateTouch
+              className="relative"
+            >
+              {testimonials.map(({ id, name, title, quote }) => (
+                <div
+                  key={id}
+                  className="bg-gray-300 shadow-md rounded-xl px-6 py-10 mx-auto max-w-2xl flex items-center gap-6"
+                >
+                
+                  {/* Text content */}
+                  <div className="text-left">
+                    <p className="text-xl italic text-gray-700 mb-4">“{quote}”</p>
+                    <h4 className="text-lg font-semibold text-gray-800">{name}</h4>
+                    <p className="text-sm text-gray-500">{title}</p>
+                  </div>
+                </div>
+              ))}
+            </Carousel>
+          </div>
         </div>
-        <button
-          onClick={next}
-          className="btn btn-sm btn-outline text-primary rounded-full"
-        >
-          <FaArrowRight />
-        </button>
       </div>
-    </section>
+    </div>
   );
 };
 
-const TestimonialCard = ({ testimonial }) => (
-  <div className="rounded-xl p-6 shadow-lg bg-base-200 text-center">
-    <FaQuoteLeft className="text-3xl text-primary mb-4 mx-auto" />
-    <p className="text-sm text-gray-700 mb-4">{testimonial.text}</p>
-    <div className="border-b border-dashed border-gray-400 w-20 mx-auto mb-4"></div>
-    <div className="flex flex-col items-center">
-      <h4 className="font-semibold">{testimonial.name}</h4>
-      <span className="text-xs text-gray-500">{testimonial.position}</span>
-    </div>
-  </div>
-);
-
 export default Testimonials;
+
+
+// import React from 'react';
+// import { Carousel } from 'react-responsive-carousel';
+// import 'react-responsive-carousel/lib/styles/carousel.min.css';
+
+// const testimonials = [
+//   {
+//     id: 1,
+//     name: 'Sarah Johnson',
+//     title: 'Marketing Manager at NovaCorp',
+//     image: 'https://randomuser.me/api/portraits/women/44.jpg',
+//     quote: 'Their service was a game-changer for our growth. Exceptional support and lightning-fast response times!',
+//   },
+//   {
+//     id: 2,
+//     name: 'James Lee',
+//     title: 'CTO of DevSpark',
+//     image: 'https://randomuser.me/api/portraits/men/32.jpg',
+//     quote: 'The professionalism and attention to detail have been unmatched. We’re proud to be long-term partners.',
+//   },
+//   {
+//     id: 3,
+//     name: 'Anita Desai',
+//     title: 'Founder, GreenEarth',
+//     image: 'https://randomuser.me/api/portraits/women/68.jpg',
+//     quote: 'Absolutely incredible team to work with! They’ve helped us scale sustainably and efficiently.',
+//   },
+// ];
+
+// const Testimonials = () => {
+//   return (
+//     <div className="bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+//       <div className="max-w-4xl mx-auto text-center">
+//         <h2 className="text-4xl font-bold text-gray-800 mb-4">What Our Clients Say</h2>
+//         <p className="text-lg text-gray-600 mb-12">
+//           Hear directly from our partners and clients around the world.
+//         </p>
+
+//         <Carousel
+//           autoPlay
+//           infiniteLoop
+//           showThumbs={false}
+//           showStatus={false}
+//           showIndicators={true}
+//           interval={5000}
+//           transitionTime={700}
+//           swipeable
+//           emulateTouch
+//           className="relative"
+//         >
+//           {testimonials.map(({ id, name, title, quote }) => (
+//             <div key={id} className="bg-white shadow-md rounded-xl px-6 py-10 mx-auto max-w-2xl">
+//               <p className="text-xl italic text-gray-700 mb-6">“{quote}”</p>
+//               <div className="items-center">
+//                   <h4 className="text-lg font-semibold text-gray-800">{name}</h4>
+//                   <p className="text-sm text-gray-500">{title}</p>
+//               </div>
+//             </div>
+//           ))}
+//         </Carousel>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Testimonials;
