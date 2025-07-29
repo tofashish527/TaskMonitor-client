@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
-import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import useAxios from '../../../Hooks/useAxios';
 
 
 
@@ -9,7 +9,7 @@ const ITEMS_PER_PAGE = 5;
 
 const PaymentHistory = () => {
     const { user } = useAuth();
-    const axiosInstance = useAxiosSecure();
+    const axiosInstance = useAxios();
     const [page, setPage] = useState(0);
 
     const { isPending, data: payments = [] } = useQuery({

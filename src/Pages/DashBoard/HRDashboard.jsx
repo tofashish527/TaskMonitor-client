@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useAxios from "../../Hooks/useAxios";
 import {
   BarChart,
   Bar,
@@ -10,11 +9,12 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import useAxios from "../../Hooks/useAxios";
 
 const TASKS = ["Paper-work", "Content", "Support", "Sales"];
 
 const HRDashboard = () => {
-  const axiosSecure = useAxios();
+  const axiosInstance = useAxios();
   const [works, setWorks] = useState([]);
 
   // Aggregated hours per task for display and chart
@@ -28,7 +28,7 @@ const HRDashboard = () => {
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const res = await axiosSecure.get("/worksheet");
+        const res = await axiosInstance.get("/worksheet");
         const data = res.data || [];
 
         setWorks(data);
@@ -54,7 +54,7 @@ const HRDashboard = () => {
     };
 
     fetchWorks();
-  }, [axiosSecure]);
+  }, [axiosInstance]);
 
   const totalHours = works.reduce((sum, item) => sum + item.hours, 0);
 

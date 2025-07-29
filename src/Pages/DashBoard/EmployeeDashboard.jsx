@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import useAxios from '../../Hooks/useAxios';
 import useAuth from '../../hooks/useAuth';
+import useAxios from '../../Hooks/useAxios';
 
 const EmployeeDashboard = () => {
-  const axiosSecure = useAxios();
+  const axiosInstance = useAxios();
   const { user } = useAuth(); // get logged-in user
   const [works, setWorks] = useState([]);
   const [totalHours, setTotalHours] = useState(0);
@@ -14,7 +14,7 @@ const EmployeeDashboard = () => {
   useEffect(() => {
     if (!user?.email) return;
     const fetchWorksheet = async () => {
-      const res = await axiosSecure.get(`/worksheet/${user.email}`);
+      const res = await axiosInstance.get(`/worksheet/${user.email}`);
       const employeeData = res.data || [];
 
       setWorks(employeeData);
@@ -23,13 +23,13 @@ const EmployeeDashboard = () => {
     };
 
     fetchWorksheet();
-  }, [axiosSecure, user]);
+  }, [axiosInstance, user]);
 
   // Get total collected money from payments
   useEffect(() => {
     if (!user?.email) return;
     const fetchPayments = async () => {
-  const res = await axiosSecure.get(`/payments/${user.email}`);
+  const res = await axiosInstance.get(`/payments/${user.email}`);
   const paymentData = res.data || [];
   const totalEarned = paymentData.reduce((acc, curr) => {
     const val = parseFloat(curr.salary || 0);
@@ -40,7 +40,7 @@ const EmployeeDashboard = () => {
 
 
     fetchPayments();
-  }, [axiosSecure, user]);
+  }, [axiosInstance, user]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">

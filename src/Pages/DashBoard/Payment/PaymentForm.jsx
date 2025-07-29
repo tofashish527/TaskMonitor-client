@@ -2,14 +2,14 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import { useLocation, useNavigate} from 'react-router';
 import Swal from 'sweetalert2';
-import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import useAxios from '../../../Hooks/useAxios';
 
 const PaymentForm = () => {
   const stripe = useStripe();
   const elements = useElements();
-  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const location = useLocation();
+  const axiosInstance=useAxios();
 
   const {
     userId,
@@ -46,7 +46,7 @@ const PaymentForm = () => {
     console.log('payment method', paymentMethod);
 
     // Step 2: Create payment intent
-    const res = await axiosSecure.post('/create-payment-intent', {
+    const res = await axiosInstance.post('/create-payment-intent', {
       amount: Math.round(salary * 100),
       user_id: userId
     });
@@ -84,7 +84,7 @@ if (result.paymentIntent.status === 'succeeded') {
   };
 
 
-  await axiosSecure.put(`/payroll/pay/${payrollId}`, paymentData);
+  await axiosInstance.put(`/payroll/pay/${payrollId}`, paymentData);
 
   await Swal.fire({
     icon: 'success',

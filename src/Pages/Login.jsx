@@ -13,40 +13,8 @@ const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const from = location.state?.from || '/';
-    //const backendBaseURL = "http://localhost:3000";
     const axiosInstance=useAxios();
 
-
-// const onSubmit = async (data) => {
-//   try {
-//     // 1. Sign in via Firebase
-//     const result = await logUser(data.email, data.password);
-//     console.log("Firebase user:", result.user);
-
-//     // 2. Fetch user data from backend by email
-//     const res = await fetch(`${backendBaseURL}/user/${encodeURIComponent(data.email)}`);
-//     if (!res.ok) throw new Error("Failed to fetch user data");
-//     const userData = await res.json();
-//     console.log("User data from backend:", userData);
-
-//     // 3. Check if user is fired
-//     if (userData?.fired) {
-//         await Swal.fire({
-//     icon: "error",
-//     title: "Access Denied",
-//     text: "You have been fired. You cannot log in.",
-//     confirmButtonText: "OK",
-//   });
-//       return; // Stop here; don't navigate
-//     }
-
-//     // 4. Navigate to intended page if not fired
-//     navigate(from);
-//   } catch (error) {
-//     console.error(error);
-//     toast.error("Login failed. Please check your credentials or account status.");
-//   }
-// };
 
   const onSubmit = async (data) => {
     try {
@@ -77,10 +45,6 @@ const Login = () => {
       toast.error("Login failed. Please check your credentials or account status.");
     }
   };
-
-
-
-
 
   return (
     <div className="card mx-auto max-w-4xl bg-lime-200 p-6 shadow mt-2">

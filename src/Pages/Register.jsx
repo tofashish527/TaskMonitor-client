@@ -105,11 +105,7 @@ const Register = () => {
 
         <input {...register("designation", { required: true })} type="text" placeholder="Designation" className="input input-bordered w-full mb-3" />
         {errors.designation && <p className="text-red-500">Designation is required</p>}
-{/* 
-        <input {...register("photo", { required: true })} type="file" accept="image/*" className="file-input file-input-bordered w-full mb-3" />
-        {errors.photo && <p className="text-red-500">Photo is required</p>} */}
 
-        
                         <label className="label">Profile Image</label>
                         <input type="file"
                             onChange={handleImageUpload}
