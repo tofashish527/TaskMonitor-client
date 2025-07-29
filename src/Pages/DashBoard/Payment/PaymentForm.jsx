@@ -20,6 +20,7 @@ const PaymentForm = () => {
     month,
     year
   } = location.state || {};
+  const { payrollId } = location.state || {}; 
 
   const [error, setError] = useState('');
 
@@ -69,32 +70,37 @@ const PaymentForm = () => {
       return;
     }
 
-    if (result.paymentIntent.status === 'succeeded') {
-      const transactionId = result.paymentIntent.id;
+   
+if (result.paymentIntent.status === 'succeeded') {
+  const transactionId = result.paymentIntent.id;
 
-      // Step 4: Send payment record to backend
-      const paymentData = {
-        empID: userId,
-        email,
-        amount: salary,
-        transactionId,
-        paymentMethod: result.paymentIntent.payment_method_types,
-        salaryMonth: month,
-        salaryYear: year
-      };
+  const paymentData = {
+    empID: userId,
+    email,
+    amount: salary,
+    transactionId,
+    paymentMethod: result.paymentIntent.payment_method_types,
+    salaryMonth: month,
+    salaryYear: year
+  };
 
-      const paymentRes = await axiosSecure.post('/payments', paymentData);
-      if (paymentRes.data.insertedId) {
-        await Swal.fire({
-          icon: 'success',
-          title: 'Payment Successful!',
-          html: `<strong>Transaction ID:</strong> <code>${transactionId}</code>`,
-          confirmButtonText: 'Go to Payroll'
-        });
+  // // ✅ 1. Save payment record
+  // const paymentRes = await axiosSecure.post('/payments', paymentData);
+  // console.log(paymentRes)
 
-        navigate('/dashboard/payroll');
-      }
-    }
+  // ✅ 2. Update payroll record
+  await axiosSecure.put(`/payroll/pay/${payrollId}`, paymentData);
+
+  await Swal.fire({
+    icon: 'success',
+    title: 'Payment Successful!',
+    html: `<strong>Transaction ID:</strong> <code>${transactionId}</code>`,
+    confirmButtonText: 'Go to Payroll'
+  });
+
+  navigate('/dashboard/payroll');
+}
+    
   };
 
   return (

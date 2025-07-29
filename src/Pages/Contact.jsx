@@ -1,59 +1,80 @@
-import React from 'react';
+import React from "react";
+import { useForm } from "react-hook-form";
+import useAxios from "../Hooks/useAxios";
+import Swal from "sweetalert2";
 
 const Contact = () => {
-  return (
-    <section className="max-w-7xl mx-auto px-6 py-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start bg-white dark:bg-gray-100 p-8 rounded-2xl shadow-xl ring-1 ring-gray-200">
-        
-        {/* Left Side - Address + Info */}
-        <div className="space-y-6">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900">Let’s Connect</h2>
-          <p className="text-gray-600 text-lg">
-            Have a question or want to discuss something related to employee tasks or performance? Drop a message and we’ll get back to you!
-          </p>
+  const { register, handleSubmit, reset } = useForm();
+  const axiosInstance = useAxios();
 
-          <div className="mt-8 text-gray-700">
-            <h4 className="text-xl font-semibold mb-2">Our Address</h4>
-            <p>TaskMonitor HR Solutions Ltd.</p>
-            <p>123 Business Avenue, Level 4</p>
-            <p>Dhaka 1212, Bangladesh</p>
-            <p>Email: contact@TaskMonitor.com</p>
-            <p>Phone: +880 1234 567890</p>
-          </div>
+  const onSubmit = async (data) => {
+    const messageData = {
+      ...data,
+      createdAt: new Date().toISOString(),
+    };
+    try {
+      await axiosInstance.post("/messages", messageData);
+      Swal.fire({
+        icon: "success",
+        title: "Message Sent!",
+        text: "Your message has been sent to the admin.",
+        confirmButtonColor: "#2563eb",
+      });
+      reset();
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Failed to send message!",
+        text: err.message,
+      });
+    }
+  };
+
+  return (
+    <section className="max-w-6xl mx-auto px-4 py-12">
+      <h2 className="text-4xl font-bold text-center mb-12 text-blue-700">
+       Feel Free To Share!!
+      </h2>
+      <div className="grid grid-cols-1 p-5 pt-3 md:grid-cols-2 gap-10 items-start bg-white rounded-xl shadow-lg overflow-hidden">
+        {/* Address Section */}
+        <div className="bg-blue-100 p-8 space-y-6">
+          <h3 className="text-2xl font-semibold text-blue-800">Our Office</h3>
+          <p className="text-gray-700 font-bold text-2xl">TaskMonitor Lab</p>
+          <p className="text-gray-700">
+            House 123, Road 10, Block C<br />
+            GreenRoad, Dhaka - 1213<br />
+            Bangladesh
+          </p>
+          <p className="text-gray-700">Phone: +880 1234 567890</p>
+          <p className="text-gray-700">Email: support@taskmonitor.com</p>
         </div>
 
-        {/* Right Side - Form */}
-        <form className="space-y-5">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
-            <input 
-              type="text" 
-              id="name" 
-              placeholder="Enter your full name"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-violet-500 focus:border-violet-500"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-            <input 
-              type="email" 
-              id="email" 
-              placeholder="you@example.com"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-violet-500 focus:border-violet-500"
-            />
-          </div>
-          <div>
-            <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-            <textarea 
-              id="message" 
-              rows="4" 
-              placeholder="How can we assist you?"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-violet-500 focus:border-violet-500"
-            ></textarea>
-          </div>
-          <button 
-            type="submit" 
-            className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 rounded-xl transition"
+        {/* Form Section */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="p-1 bg-white space-y-6"
+        >
+          <input
+            type="text"
+            {...register("name", { required: true })}
+            placeholder="Your Name"
+            className="w-full border border-gray-300 px-4 py-3 rounded-md focus:outline-blue-500"
+          />
+          <input
+            type="email"
+            {...register("email", { required: true })}
+            placeholder="Your Email"
+            className="w-full border border-gray-300 px-4 py-3 rounded-md focus:outline-blue-500"
+          />
+          <textarea
+            {...register("message", { required: true })}
+            placeholder="Your Message"
+            rows="5"
+            className="w-full border border-gray-300 px-4 py-3 rounded-md focus:outline-blue-500"
+          ></textarea>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition"
           >
             Send Message
           </button>

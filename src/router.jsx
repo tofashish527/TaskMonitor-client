@@ -20,6 +20,7 @@ import Progress from "./Pages/DashBoard/Progress";
 import HRRoute from "./Context/HRRoute";
 import AdminRoute from "./Context/AdminRoute";
 import Payroll from "./Pages/DashBoard/Payroll";
+import AdminMessages from "./Pages/DashBoard/AdminMessages";
 
 
 export const router = createBrowserRouter([
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
       {
         path:'allemployeelist',
         element:<AdminRoute><AllEmployeeList/></AdminRoute>
+      }, 
+      {
+        path:'adminmessages',
+        element:<AdminRoute><AdminMessages/></AdminRoute>
       }, 
       {
         path:'payment/:user_id',

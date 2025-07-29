@@ -94,6 +94,12 @@ const DashboardLayout = () => {
                             Payroll
                         </NavLink>
                     </li>
+                    <li>
+                       <NavLink to="/dashboard/adminmessages">
+                            <FaBoxOpen className="inline-block mr-2" />
+                            Messages
+                        </NavLink>
+                    </li>
                     </>
                   }
 
