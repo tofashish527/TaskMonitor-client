@@ -1,13 +1,13 @@
-## Task Monitor - Employee Management System
+ Task Monitor - Employee Management System
 A full-stack role-based web application for managing employees, monitoring daily tasks, and tracking payroll operations. Built with React, TailwindCSS, Firebase Auth, Node.js, Express, and MongoDB.
 
 🔗 Live Links
-🌐 Client Side: https://task-monitor-client.vercel.app
+🌐 Client Side: https://task-monitor-client.web.app/ 
 
-⚙️ Server Side: https://task-monitor-server.vercel.app
+⚙️ Server Side: https://task-monitor-server.vercel.app/
 
 
-## Admin Credentials
+## Admin Credentials ##
 Admin Email: admin1@gmail.com
 Admin Password: *Admin1#
 
