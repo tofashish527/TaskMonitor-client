@@ -1,7 +1,13 @@
 import React from "react";
 import cloudy from "../assets/img/Cloudy.jpg";
+import { useNavigate } from "react-router";
 
 const Newsletter = () => {
+  const navigate=useNavigate()
+  const handlesignIn=(e)=>{
+    e.preventDefault();
+    navigate('/login');
+  }
   return (
     <section
       className="relative py-35 px-4 text-white bg-cover bg-center"
@@ -22,10 +28,11 @@ const Newsletter = () => {
             className="w-full sm:w-80 px-4 py-3  text-gray-800 bg-white"
           />
           <button
+          onClick={handlesignIn}
             type="submit"
             className="bg-blue-950 text-white font-semibold px-6 py-3 transition-all"
           >
-            Sign Up
+            Sign IN
           </button>
         </form>
 

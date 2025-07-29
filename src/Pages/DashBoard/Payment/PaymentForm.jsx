@@ -89,7 +89,7 @@ const PaymentForm = () => {
           icon: 'success',
           title: 'Payment Successful!',
           html: `<strong>Transaction ID:</strong> <code>${transactionId}</code>`,
-          confirmButtonText: 'Go to Employee List'
+          confirmButtonText: 'Go to Payroll'
         });
 
         navigate('/dashboard/payroll');

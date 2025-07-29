@@ -8,27 +8,56 @@ const AdminDashboard = () => {
   const [totalPayments, setTotalPayments] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch total employees count
-        const empRes = await axiosInstance.get("/employees/count");
-        setTotalEmployees(empRes.data.count || 0);
+  const fetchData = async () => {
+    try {
+      // Fetch total employees count
+      const empRes = await axiosInstance.get("/employees/count");
+      setTotalEmployees(empRes.data.count || 0);
 
-        // Fetch total salary paid (sum of all payments)
-        const paymentsRes = await axiosInstance.get("/payroll/requests");
-        const payments = paymentsRes.data || [];
-        const sumSalary = payments.reduce((acc, curr) => acc + (curr.salary || 0), 0);
-        setTotalSalaryPaid(sumSalary);
+      // Fetch all payroll records
+      const paymentsRes = await axiosInstance.get("/payroll/requests");
+      const payments = paymentsRes.data || [];
 
-        // Optional: total number of payment records
-        setTotalPayments(payments.length);
-      } catch (error) {
-        console.error("Failed to fetch admin dashboard data", error);
-      }
-    };
+      // Filter only paid payrolls (with paymentDate)
+      const paidPayments = payments.filter((item) => item.paymentDate);
 
-    fetchData();
-  }, [axiosInstance]);
+      // Calculate total paid salary
+      const sumSalary = paidPayments.reduce((acc, curr) => acc + (curr.salary || 0), 0);
+      setTotalSalaryPaid(sumSalary);
+
+      // Count only paid payrolls
+      setTotalPayments(paidPayments.length);
+    } catch (error) {
+      console.error("Failed to fetch admin dashboard data", error);
+    }
+  };
+
+  fetchData();
+}, [axiosInstance]);
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // Fetch total employees count
+  //       const empRes = await axiosInstance.get("/employees/count");
+  //       setTotalEmployees(empRes.data.count || 0);
+
+  //       // Fetch total salary paid (sum of all payments)
+  //       const paymentsRes = await axiosInstance.get("/payroll/requests");
+  //       const payments = paymentsRes.data || [];
+  //       const sumSalary = payments.reduce((acc, curr) => acc + (curr.salary || 0), 0);
+  //       setTotalSalaryPaid(sumSalary);
+
+  //       // Optional: total number of payment records
+  //       setTotalPayments(payments.length);
+  //     } catch (error) {
+  //       console.error("Failed to fetch admin dashboard data", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [axiosInstance]);
 
   return (
     <div className="max-w-6xl mx-auto p-8 space-y-8">

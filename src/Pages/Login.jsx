@@ -55,7 +55,7 @@ const Login = () => {
       console.log("Firebase user:", result.user);
 
       // 2. Axios request to backend
-      const res = await axiosInstance.get(`/user/${encodeURIComponent(data.email)}`);
+      const res = await axiosInstance.get(`/user/email/${encodeURIComponent(data.email)}`);
       const userData = res.data;
       console.log("User data from backend:", userData);
 

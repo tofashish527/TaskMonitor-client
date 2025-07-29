@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router';
 import axios from 'axios';
@@ -13,6 +13,7 @@ const Register = () => {
   const axiosInstance = useAxios();
   const location = useLocation();
   const navigate = useNavigate();
+  const [profilePic, setProfilePic] = useState('');
   const from = location.state?.from?.pathname || '/';
 
   const onSubmit = async (data) => {
@@ -27,25 +28,7 @@ const Register = () => {
     }
 
     // Upload image
-    let imageURL = '';
-    if (!data.photo || data.photo.length === 0) {
-  toast.error("Photo is missing.");
-  return;
-}
-    const imageFile = data.photo[0];
-    if (imageFile) {
-      const formData = new FormData();
-      formData.append('image', imageFile);
-      const imgUploadURL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_Upload_Key}`;
-      try {
-        const res = await axios.post(imgUploadURL, formData);
-        imageURL = res.data.data.url;
-      } catch (error) {
-        toast.error('Image upload failed.',+error.message);
-        return;
-      }
-    }
-
+  
     // Create user
     try {
       const result = await createuser(data.email, data.password);
@@ -55,7 +38,7 @@ const Register = () => {
       // Update profile
       await updateProfileInfo({
         displayName: data.name,
-        photoURL: imageURL
+        photoURL: profilePic
       });
 
       // to backend
@@ -66,7 +49,7 @@ const Register = () => {
         bank_account_no: data.bank_account_no,
         salary: parseFloat(data.salary),
         designation: data.designation,
-        photo: imageURL,
+        photo: profilePic,
         created_at: new Date().toISOString(),
         last_log_in: new Date().toISOString()
       };
@@ -78,6 +61,21 @@ const Register = () => {
       toast.error(error.message);
     }
   };
+
+    const handleImageUpload = async (e) => {
+        const image = e.target.files[0];
+        console.log(image)
+
+        const formData = new FormData();
+        formData.append('image', image);
+
+
+        const imagUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_Upload_Key}`
+        const res = await axios.post(imagUploadUrl, formData)
+
+        setProfilePic(res.data.data.url);
+
+    }
 
   return (
     <div className="max-w-md bg-lime-200 mx-auto p-5 shadow-md mb-3 rounded-xl">
@@ -107,9 +105,15 @@ const Register = () => {
 
         <input {...register("designation", { required: true })} type="text" placeholder="Designation" className="input input-bordered w-full mb-3" />
         {errors.designation && <p className="text-red-500">Designation is required</p>}
-
+{/* 
         <input {...register("photo", { required: true })} type="file" accept="image/*" className="file-input file-input-bordered w-full mb-3" />
-        {errors.photo && <p className="text-red-500">Photo is required</p>}
+        {errors.photo && <p className="text-red-500">Photo is required</p>} */}
+
+        
+                        <label className="label">Profile Image</label>
+                        <input type="file"
+                            onChange={handleImageUpload}
+                            className="input" placeholder="Your Profile picture" />
 
         <button type="submit" className="btn btn-primary w-full mt-3">Register</button>
       </form>
