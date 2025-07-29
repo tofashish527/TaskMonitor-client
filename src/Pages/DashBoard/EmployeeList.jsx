@@ -105,43 +105,8 @@ const EmployeeList = () => {
   }
 };
 
-// const handlePaymentRequest = () => {
-//   if (!payMonth || !payYear) {
-//     return Swal.fire("Error", "Please enter both month and year", "warning");
-//   }
-
-//   // Check if already paid for this month/year (case-insensitive, robust)
-//   const alreadyPaid = existingPayroll.find(
-//     (entry) => {
-//       // Support both possible field names from backend: month/year or salaryMonth/salaryYear
-//       const entryMonth = entry.month || entry.salaryMonth;
-//       const entryYear = entry.year || entry.salaryYear;
-//       return (
-//         String(entryMonth).toLowerCase() === payMonth.toLowerCase() &&
-//         String(entryYear) === String(payYear)
-//       );
-//     }
-//   );
-
-//   if (alreadyPaid) {
-//     return Swal.fire("Warning", "Salary already paid for this month & year! You can’t pay an employee twice for the same period.", "warning");
-//   }
-
-//   // Close modal and navigate to payment gateway
-//   setPayModalOpen(false);
-
-//   navigate(`/dashboard/payment/${selectedEmployee._id}`, {
-//     state: {
-//       userId: selectedEmployee._id,
-//       name: selectedEmployee.name,
-//       email: selectedEmployee.email,
-//       salary: selectedEmployee.salary,
-//       month: payMonth,
-//       year: Number(payYear),
-//     },
-//   });
-// };
-  return (
+ 
+return (
     <div className="overflow-x-auto shadow-md rounded-xl p-6">
       <h2 className="text-2xl font-bold mb-4">Employee List (HR)</h2>
 

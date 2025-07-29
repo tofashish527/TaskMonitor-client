@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import useAxios from '../../Hooks/useAxios';
 import useAuth from '../../hooks/useAuth';
- // assuming you have this to get user email
 
 const EmployeeDashboard = () => {
   const axiosSecure = useAxios();

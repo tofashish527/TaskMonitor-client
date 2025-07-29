@@ -11,7 +11,6 @@ const PaymentForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ✅ Get employee data from location.state
   const {
     userId,
     name,
@@ -84,11 +83,7 @@ if (result.paymentIntent.status === 'succeeded') {
     salaryYear: year
   };
 
-  // // ✅ 1. Save payment record
-  // const paymentRes = await axiosSecure.post('/payments', paymentData);
-  // console.log(paymentRes)
 
-  // ✅ 2. Update payroll record
   await axiosSecure.put(`/payroll/pay/${payrollId}`, paymentData);
 
   await Swal.fire({

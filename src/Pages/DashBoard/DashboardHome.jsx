@@ -4,6 +4,7 @@ import Loading from '../../Component/Loading';
 import EmployeeDashboard from './EmployeeDashboard';
 import HRDashboard from './HRDashboard';
 import AdminDashboard from './AdminDashboard';
+import Forbidden from './Forbidden';
 
 const DashboardHome = () => {
     const { role, roleLoading } = useUserRole();
@@ -18,12 +19,12 @@ const DashboardHome = () => {
     else if(role === 'HR'){
         return <HRDashboard></HRDashboard>
     }
-    else {
+    else if(role=== "Admin"){
         return <AdminDashboard></AdminDashboard>
     }
-    // else {
-    //     return <Forbidden></Forbidden>
-    // }
+    else {
+        return <Forbidden></Forbidden>
+    }
 
 };
 

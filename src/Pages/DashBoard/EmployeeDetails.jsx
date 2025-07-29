@@ -13,10 +13,8 @@ import {
 import useAxios from "../../Hooks/useAxios";
 
 const getIntroOfMonthYear = (label) => {
-  // Custom descriptions per label if needed, or return empty string
   const descriptions = {
-    // example:
-    // "Aug'2025": "August 2025 payroll",
+    
   };
   return descriptions[label] || "";
 };
@@ -92,41 +90,7 @@ const EmployeeDetails = () => {
 
       <div>
         <h3 className="text-xl font-semibold mb-2">Salary History</h3>
-        {payroll.length > 0 ? (
-//             <ResponsiveContainer width={700} height={500}>
-//   <BarChart
-//     data={payroll}
-//     margin={{ top: 5, right: 30, left: 120, bottom: 100 }}  // Increased left and bottom margins
-//     barCategoryGap={100}
-//     barSize={50}
-//   >
-//     <CartesianGrid strokeDasharray="3 3" />
-//     <XAxis
-//       dataKey="label"
-//       angle={-25}
-//       textAnchor="end"
-//       interval={0}
-//       label={{
-//         value: "Month, Year",
-//         position: "insideBottom",
-//         offset: -50,  // Push label further down
-//         style: { textAnchor: "middle", fontSize: 24 },
-//       }}
-//     />
-//     <YAxis
-//       label={{
-//         value: "Salary Amount ($)",
-//         angle: -90,
-//         position: "insideLeft",
-//         offset: -30,  // Push label further left
-//         style: { textAnchor: "middle", fontSize: 24 },
-//       }}
-//     />
-//     <Tooltip content={CustomTooltip} />
-//     <Legend />
-//     <Bar dataKey="salary" fill="#8884d8"  radius={[4, 4, 0, 0]} />
-//   </BarChart>
-// </ResponsiveContainer>
+        {payroll.length > 0 ? (     
 
 <ResponsiveContainer width={600} height={400}>
   <BarChart
