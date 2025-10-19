@@ -43,7 +43,7 @@ const EmployeeDashboard = () => {
   }, [axiosInstance, user]);
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-8">
+    <div className="pt-25 max-w-7xl mx-auto space-y-8">
       <h2 className="text-4xl font-bold text-indigo-700 mb-6">Employee Dashboard</h2>
 
       {/* Stats */}

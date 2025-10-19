@@ -21,6 +21,10 @@ import HRRoute from "./Context/HRRoute";
 import AdminRoute from "./Context/AdminRoute";
 import Payroll from "./Pages/DashBoard/Payroll";
 import AdminMessages from "./Pages/DashBoard/AdminMessages";
+import AllFeaturedProducts from "./Pages/AllFeaturedProducts";
+import ProjectDetails from "./Pages/ProjectDetails";
+import SalesHistory from "./Pages/SalesHistory";
+import FeaturedProductDetail from "./Pages/FeaturedProductDetail";
 
 
 export const router = createBrowserRouter([
@@ -31,6 +35,22 @@ export const router = createBrowserRouter([
         {
             index:true,
             Component:Home,
+        },
+        {
+            path:"/allfeatured",
+            Component:AllFeaturedProducts,
+        },
+        {
+          path:"/sales-history",
+          Component:SalesHistory,
+        },
+        {
+           path:"/project/:id",
+           Component:ProjectDetails,
+        },
+        {
+          path:"/featuredproductdetail/:id",
+          Component:FeaturedProductDetail,
         },
         {
             path:"/contact",

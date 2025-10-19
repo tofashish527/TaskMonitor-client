@@ -37,7 +37,7 @@ const AdminDashboard = () => {
 
 
   return (
-    <div className="max-w-6xl mx-auto p-8 space-y-8">
+    <div className="max-w-6xl mx-auto pt-25 space-y-8">
       <h1 className="text-4xl font-bold mb-8 text-center">Admin Dashboard</h1>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="bg-white shadow rounded-lg p-6 text-center">
