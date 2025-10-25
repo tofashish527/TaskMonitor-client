@@ -40,52 +40,71 @@ const Payroll = () => {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Payroll Requests</h2>
-      {requests.length === 0 ? (
-        <p>No pending payroll requests.</p>
-      ) : (
-        <table className="table w-full">
-          <thead className="bg-base-200">
-            <tr>
-              <th>Name</th>
-              <th>Salary</th>
-              <th>Month</th>
-              <th>Year</th>
-              <th>Payment Date</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {requests.map((req) => (
-              <tr key={req._id}>
-                <td>{req.name}</td>
-                <td>${req.salary}</td>
-                <td>{req.month}</td>
-                <td>{req.year}</td>
-                <td>
-                  {req.paymentDate
-                    ? new Date(req.paymentDate).toLocaleDateString()
-                    : "-"}
-                </td>
-                <td>
-                  <button
-                    className="btn btn-sm btn-success"
-                    onClick={() => handlePay(req)}
-                    disabled={!!req.paymentDate || updating === req._id}
-                  >
-                    {req.paymentDate
-                      ? "Paid"
-                      : updating === req._id
-                      ? "Paying..."
-                      : "Pay"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+    <div className="min-h-screen bg-purple-300 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-purple-800/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-600/50 shadow-2xl">
+          {/* Header */}
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold text-white mb-2">Payroll Requests</h2>
+            <p className="text-purple-200">Manage employee salary payments</p>
+          </div>
+
+          {requests.length === 0 ? (
+            <div className="text-center p-8 text-purple-200">
+              <p className="text-lg">No pending payroll requests.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-purple-700/50 border-b border-purple-600/50">
+                    <th className="p-4 text-left text-white font-semibold">Name</th>
+                    <th className="p-4 text-left text-white font-semibold">Salary</th>
+                    <th className="p-4 text-left text-white font-semibold">Month</th>
+                    <th className="p-4 text-left text-white font-semibold">Year</th>
+                    <th className="p-4 text-left text-white font-semibold">Payment Date</th>
+                    <th className="p-4 text-left text-white font-semibold">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {requests.map((req) => (
+                    <tr key={req._id} className="border-b border-purple-600/30 hover:bg-purple-700/20 transition-colors duration-200">
+                      <td className="p-4 text-white">{req.name}</td>
+                      <td className="p-4 text-purple-300 font-semibold">${req.salary}</td>
+                      <td className="p-4 text-white">{req.month}</td>
+                      <td className="p-4 text-white">{req.year}</td>
+                      <td className="p-4 text-purple-200">
+                        {req.paymentDate
+                          ? new Date(req.paymentDate).toLocaleDateString()
+                          : "-"}
+                      </td>
+                      <td className="p-4">
+                        <button
+                          className={`px-4 py-2 rounded-lg transition-colors duration-200 border ${
+                            req.paymentDate
+                              ? "bg-green-600/50 text-green-300 border-green-500 cursor-not-allowed"
+                              : updating === req._id
+                              ? "bg-purple-600/50 text-purple-300 border-purple-500 cursor-not-allowed"
+                              : "bg-green-600 hover:bg-green-700 text-white border-green-500"
+                          }`}
+                          onClick={() => handlePay(req)}
+                          disabled={!!req.paymentDate || updating === req._id}
+                        >
+                          {req.paymentDate
+                            ? "Paid"
+                            : updating === req._id
+                            ? "Paying..."
+                            : "Pay"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

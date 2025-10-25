@@ -25,12 +25,15 @@ import AllFeaturedProducts from "./Pages/AllFeaturedProducts";
 import ProjectDetails from "./Pages/ProjectDetails";
 import SalesHistory from "./Pages/SalesHistory";
 import FeaturedProductDetail from "./Pages/FeaturedProductDetail";
+import Profile from "./Pages/DashBoard/Profile";
+import Error from "./Shared/Error";
 
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
+    errorElement:<Error></Error>,
     children:[
         {
             index:true,
@@ -81,6 +84,10 @@ export const router = createBrowserRouter([
       {
         index:true,
         Component:DashboardHome,
+      },
+      {
+        path:'profile',
+        Component:Profile,
       },
       {
         path:'worksheet',

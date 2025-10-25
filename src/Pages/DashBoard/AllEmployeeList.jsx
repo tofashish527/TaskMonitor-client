@@ -86,82 +86,151 @@ const AllEmployeeList = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">All Employees</h2>
-        <button
-          onClick={() => setViewMode(viewMode === "table" ? "card" : "table")}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          {viewMode === "table" ? "Switch to Card View" : "Switch to Table View"}
-        </button>
-      </div>
+    <div className="min-h-screen bg-purple-300 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-purple-800/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-600/50 shadow-2xl">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+              <h2 className="text-3xl font-bold text-white mb-2">All Employees</h2>
+              <p className="text-purple-200">Manage your team members and their roles</p>
+            </div>
+            <button
+              onClick={() => setViewMode(viewMode === "table" ? "card" : "table")}
+              className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all duration-300 border border-purple-500"
+            >
+              {viewMode === "table" ? "Switch to Card View" : "Switch to Table View"}
+            </button>
+          </div>
 
-      {viewMode === "table" ? (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border">
-            <thead className="bg-gray-100">
-              <tr className="text-left">
-                <th className="border px-4 py-2">#</th>
-                <th className="border px-4 py-2">Name</th>
-                <th className="border px-4 py-2">Email</th>
-                <th className="border px-4 py-2">Designation</th>
-                <th className="border px-4 py-2">Salary</th>
-                <th className="border px-4 py-2">Fire</th>
-                <th className="border px-4 py-2">Make HR</th>
-                <th className="border px-4 py-2">Adjust Salary</th>
-              </tr>
-            </thead>
-            <tbody>
-              {employees.map((emp, index) => (
-                <tr key={emp._id} className="hover:bg-gray-50 text-sm">
-                  <td className="border px-4 py-2">{index + 1}</td>
-                  <td className="border px-4 py-2">{emp.name}</td>
-                  <td className="border px-4 py-2">{emp.email}</td>
-                  <td className="border px-4 py-2">{emp.designation}</td>
-                  <td className="border px-4 py-2">${emp.salary}</td>
-                  <td className="border px-4 py-2 text-center">
+          {viewMode === "table" ? (
+            /* Table View */
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-purple-700/50 border-b border-purple-600/50">
+                    <th className="p-4 text-left text-white font-semibold">#</th>
+                    <th className="p-4 text-left text-white font-semibold">Name</th>
+                    <th className="p-4 text-left text-white font-semibold">Email</th>
+                    <th className="p-4 text-left text-white font-semibold">Designation</th>
+                    <th className="p-4 text-left text-white font-semibold">Salary</th>
+                    <th className="p-4 text-left text-white font-semibold">Fire</th>
+                    <th className="p-4 text-left text-white font-semibold">Make HR</th>
+                    <th className="p-4 text-left text-white font-semibold">Adjust Salary</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {employees.map((emp, index) => (
+                    <tr key={emp._id} className="border-b border-purple-600/30 hover:bg-purple-700/20 transition-colors duration-200">
+                      <td className="p-4 text-white font-medium">{index + 1}</td>
+                      <td className="p-4 text-white">{emp.name}</td>
+                      <td className="p-4 text-purple-200">{emp.email}</td>
+                      <td className="p-4 text-white">{emp.designation}</td>
+                      <td className="p-4 text-purple-300 font-semibold">${emp.salary}</td>
+                      <td className="p-4">
+                        <button
+                          onClick={() => !emp.fired && handleFire(emp._id, emp.name)}
+                          className={`${
+                            emp.fired
+                              ? "bg-gray-600/50 cursor-not-allowed text-gray-400"
+                              : "bg-red-600/80 hover:bg-red-700 text-white"
+                          } px-4 py-2 rounded-lg transition-colors duration-200 border border-red-500`}
+                          disabled={emp.fired}
+                          title={emp.fired ? "Already Fired" : "Fire"}
+                        >
+                          {emp.fired ? "Fired" : "Fire"}
+                        </button>
+                      </td>
+                      <td className="p-4">
+                        {emp.fired ? (
+                          <FaTimesCircle
+                            className="text-red-400 mx-auto"
+                            size={20}
+                            title="Fired"
+                          />
+                        ) : emp.role === "Employee" ? (
+                          <button
+                            onClick={() => handleMakeHR(emp._id)}
+                            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 border border-purple-500"
+                          >
+                            Make HR
+                          </button>
+                        ) : (
+                          <span className="text-green-400 font-semibold flex justify-center">
+                            HR
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-4 text-center">
+                        <button
+                          onClick={() => !emp.fired && openSalaryModal(emp)}
+                          className={`${
+                            emp.fired
+                              ? "text-gray-400 cursor-not-allowed"
+                              : "text-yellow-400 hover:text-yellow-300"
+                          } transition-colors duration-200`}
+                          disabled={emp.fired}
+                          title={
+                            emp.fired
+                              ? "Cannot adjust salary of a fired employee"
+                              : "Adjust Salary"
+                          }
+                        >
+                          <FaEdit size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            /* Card View */
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {employees.map((emp) => (
+                <div
+                  key={emp._id}
+                  className="bg-purple-700/30 border border-purple-600/50 rounded-xl p-4 backdrop-blur-sm hover:bg-purple-700/40 transition-all duration-300"
+                >
+                  <h3 className="font-semibold text-lg text-white mb-2">{emp.name}</h3>
+                  <p className="text-purple-200 text-sm mb-2">{emp.email}</p>
+                  <p className="text-white text-sm mb-2">Designation: {emp.designation}</p>
+                  <p className="text-purple-300 font-semibold mb-4">Salary: ${emp.salary}</p>
+                  <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => !emp.fired && handleFire(emp._id, emp.name)}
                       className={`${
                         emp.fired
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-red-500 hover:bg-red-600"
-                      } text-white px-2 py-1 rounded`}
+                          ? "bg-gray-600/50 cursor-not-allowed text-gray-400"
+                          : "bg-red-600/80 hover:bg-red-700 text-white"
+                      } px-3 py-2 rounded-lg text-sm transition-colors duration-200 border border-red-500 flex-1`}
                       disabled={emp.fired}
-                      title={emp.fired ? "Already Fired" : "Fire"}
                     >
                       {emp.fired ? "Fired" : "Fire"}
                     </button>
-                  </td>
-                  <td className="border px-4 py-2 text-center">
                     {emp.fired ? (
                       <FaTimesCircle
-                        className="text-red-600 mx-auto"
+                        className="text-red-400"
                         size={20}
                         title="Fired"
                       />
                     ) : emp.role === "Employee" ? (
                       <button
                         onClick={() => handleMakeHR(emp._id)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded"
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-sm transition-colors duration-200 border border-purple-500 flex-1"
                       >
                         Make HR
                       </button>
                     ) : (
-                      <span className="text-green-600 font-semibold flex justify-center">
-                        HR
-                      </span>
+                      <span className="text-green-400 font-semibold text-sm flex items-center justify-center flex-1">HR</span>
                     )}
-                  </td>
-                  <td className="border px-4 py-2 text-center">
                     <button
                       onClick={() => !emp.fired && openSalaryModal(emp)}
                       className={`${
                         emp.fired
                           ? "text-gray-400 cursor-not-allowed"
-                          : "text-yellow-600 hover:text-yellow-800"
-                      }`}
+                          : "text-yellow-400 hover:text-yellow-300"
+                      } p-2 transition-colors duration-200`}
                       disabled={emp.fired}
                       title={
                         emp.fired
@@ -169,115 +238,56 @@ const AllEmployeeList = () => {
                           : "Adjust Salary"
                       }
                     >
-                      <FaEdit size={18} />
+                      <FaEdit size={16} />
                     </button>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {employees.map((emp) => (
-            <div
-              key={emp._id}
-              className="bg-white p-4 border shadow rounded-md flex flex-col gap-2"
-            >
-              <h3 className="font-semibold text-lg">{emp.name}</h3>
-              <p className="text-gray-600">{emp.email}</p>
-              <p className="text-sm">Designation: {emp.designation}</p>
-              <p className="text-sm font-medium">Salary: ${emp.salary}</p>
-              <div className="flex flex-wrap gap-2 mt-2">
+            </div>
+          )}
+
+          {/* Salary Modal */}
+          {salaryModalOpen && selectedUser && (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+              <div className="bg-purple-800/90 border border-purple-600 rounded-2xl p-6 w-full max-w-md shadow-2xl backdrop-blur-sm">
                 <button
-                  onClick={() => !emp.fired && handleFire(emp._id, emp.name)}
-                  className={`${
-                    emp.fired
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-red-500 hover:bg-red-600"
-                  } text-white px-2 py-1 rounded text-xs`}
-                  disabled={emp.fired}
+                  className="absolute top-4 right-4 text-purple-200 hover:text-white transition-colors duration-200"
+                  onClick={() => setSalaryModalOpen(false)}
                 >
-                  {emp.fired ? "Fired" : "Fire"}
+                  <IoMdClose size={24} />
                 </button>
-                {emp.fired ? (
-                  <FaTimesCircle
-                    className="text-red-600"
-                    size={20}
-                    title="Fired"
-                  />
-                ) : emp.role === "Employee" ? (
+                <h3 className="text-xl font-bold text-white mb-4">Adjust Salary</h3>
+                <div className="text-purple-200 text-sm mb-4">
+                  <p><strong>Name:</strong> {selectedUser.name}</p>
+                  <p><strong>Email:</strong> {selectedUser.email}</p>
+                </div>
+                <input
+                  type="number"
+                  min={selectedUser.salary}
+                  value={newSalary}
+                  onChange={(e) => setNewSalary(e.target.value)}
+                  className="w-full bg-purple-900/50 border border-purple-600 rounded-xl px-4 py-3 text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4"
+                  placeholder="Enter new salary"
+                />
+                <div className="flex justify-end gap-3">
                   <button
-                    onClick={() => handleMakeHR(emp._id)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                    onClick={() => setSalaryModalOpen(false)}
+                    className="px-4 py-2 bg-purple-600/50 hover:bg-purple-600 text-white rounded-xl transition-colors duration-200 border border-purple-500"
                   >
-                    Make HR
+                    Cancel
                   </button>
-                ) : (
-                  <span className="text-green-600 font-semibold text-xs">HR</span>
-                )}
-                <button
-                  onClick={() => !emp.fired && openSalaryModal(emp)}
-                  className={`${
-                    emp.fired
-                      ? "text-gray-400 cursor-not-allowed"
-                      : "text-yellow-600 hover:text-yellow-800"
-                  } text-xs`}
-                  disabled={emp.fired}
-                  title={
-                    emp.fired
-                      ? "Cannot adjust salary of a fired employee"
-                      : "Adjust Salary"
-                  }
-                >
-                  <FaEdit size={16} />
-                </button>
+                  <button
+                    onClick={updateSalary}
+                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl transition-colors duration-200 border border-green-500"
+                  >
+                    Update
+                  </button>
+                </div>
               </div>
             </div>
-          ))}
+          )}
         </div>
-      )}
-
-      {/* Salary Modal */}
-      {salaryModalOpen && selectedUser && (
-        <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex justify-center items-center z-50">
-          <div className="bg-white/80 rounded-lg p-6 w-80 shadow-lg relative">
-            <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
-              onClick={() => setSalaryModalOpen(false)}
-            >
-              <IoMdClose size={20} />
-            </button>
-            <h3 className="text-lg font-semibold mb-4">Adjust Salary</h3>
-            <div className="text-sm mb-2">
-              <p><strong>Name:</strong> {selectedUser.name}</p>
-              <p><strong>Email:</strong> {selectedUser.email}</p>
-            </div>
-            <input
-              type="number"
-              min={selectedUser.salary}
-              value={newSalary}
-              onChange={(e) => setNewSalary(e.target.value)}
-              className="w-full border px-3 py-2 rounded mb-4"
-              placeholder="Enter new salary"
-            />
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setSalaryModalOpen(false)}
-                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={updateSalary}
-                className="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white"
-              >
-                Update
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };

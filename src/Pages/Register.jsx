@@ -78,48 +78,131 @@ const Register = () => {
     }
 
   return (
-    <div className="max-w-md bg-lime-200 mx-auto p-5 shadow-md mb-3 rounded-xl">
-      <h2 className="text-2xl font-bold text-center mb-4">Register</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("name", { required: true })} type="text" placeholder="Full Name" className="input input-bordered w-full mb-3" />
-        {errors.name && <p className="text-red-500">Name is required</p>}
+      <div className="max-w-md mx-auto border-2 rounded-2xl border-purple-400">
+        <div className="bg-purple-800/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-600/50 shadow-2xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
+            <p className="text-purple-200">Join our platform today</p>
+          </div>
 
-        <input {...register("email", { required: true })} type="email" placeholder="Email" className="input input-bordered w-full mb-3" />
-        {errors.email && <p className="text-red-500">Email is required</p>}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Name Field */}
+            <div>
+              <input 
+                {...register("name", { required: true })} 
+                type="text" 
+                placeholder="Full Name" 
+                className="w-full bg-purple-900/50 border border-purple-600 rounded-xl px-4 py-3 text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300" 
+              />
+              {errors.name && <p className="text-red-300 text-sm mt-1 ml-1">Name is required</p>}
+            </div>
 
-        <input {...register("password", { required: true })} type="password" placeholder="Password" className="input input-bordered w-full mb-3" />
-        {errors.password && <p className="text-red-500">Password is required</p>}
+            {/* Email Field */}
+            <div>
+              <input 
+                {...register("email", { required: true })} 
+                type="email" 
+                placeholder="Email Address" 
+                className="w-full bg-purple-900/50 border border-purple-600 rounded-xl px-4 py-3 text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300" 
+              />
+              {errors.email && <p className="text-red-300 text-sm mt-1 ml-1">Email is required</p>}
+            </div>
 
-        <select {...register("role", { required: true })} className="select select-bordered w-full mb-3">
-          <option value="">Select Role</option>
-          <option value="Employee">Employee</option>
-          <option value="HR">HR</option>
-        </select>
-        {errors.role && <p className="text-red-500">Role is required</p>}
+            {/* Password Field */}
+            <div>
+              <input 
+                {...register("password", { required: true })} 
+                type="password" 
+                placeholder="Password" 
+                className="w-full bg-purple-900/50 border border-purple-600 rounded-xl px-4 py-3 text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300" 
+              />
+              {errors.password && <p className="text-red-300 text-sm mt-1 ml-1">Password is required</p>}
+            </div>
 
-        <input {...register("bank_account_no", { required: true })} type="text" placeholder="Bank Account Number" className="input input-bordered w-full mb-3" />
-        {errors.bank_account_no && <p className="text-red-500">Bank account number is required</p>}
+            {/* Role Selection */}
+            <div>
+              <select 
+                {...register("role", { required: true })} 
+                className="w-full bg-purple-900/50 border border-purple-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+              >
+                <option value="" className="text-purple-900">Select Role</option>
+                <option value="Employee" className="text-purple-900">Employee</option>
+                <option value="HR" className="text-purple-900">HR</option>
+              </select>
+              {errors.role && <p className="text-red-300 text-sm mt-1 ml-1">Role is required</p>}
+            </div>
 
-        <input {...register("salary", { required: true })} type="number" placeholder="Salary" className="input input-bordered w-full mb-3" />
-        {errors.salary && <p className="text-red-500">Salary is required</p>}
+            {/* Bank Account Number */}
+            <div>
+              <input 
+                {...register("bank_account_no", { required: true })} 
+                type="text" 
+                placeholder="Bank Account Number" 
+                className="w-full bg-purple-900/50 border border-purple-600 rounded-xl px-4 py-3 text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300" 
+              />
+              {errors.bank_account_no && <p className="text-red-300 text-sm mt-1 ml-1">Bank account number is required</p>}
+            </div>
 
-        <input {...register("designation", { required: true })} type="text" placeholder="Designation" className="input input-bordered w-full mb-3" />
-        {errors.designation && <p className="text-red-500">Designation is required</p>}
+            {/* Salary */}
+            <div>
+              <input 
+                {...register("salary", { required: true })} 
+                type="number" 
+                placeholder="Salary" 
+                className="w-full bg-purple-900/50 border border-purple-600 rounded-xl px-4 py-3 text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300" 
+              />
+              {errors.salary && <p className="text-red-300 text-sm mt-1 ml-1">Salary is required</p>}
+            </div>
 
-                        <label className="label">Profile Image</label>
-                        <input type="file"
-                            onChange={handleImageUpload}
-                            className="input" placeholder="Your Profile picture" />
+            {/* Designation */}
+            <div>
+              <input 
+                {...register("designation", { required: true })} 
+                type="text" 
+                placeholder="Designation" 
+                className="w-full bg-purple-900/50 border border-purple-600 rounded-xl px-4 py-3 text-white placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300" 
+              />
+              {errors.designation && <p className="text-red-300 text-sm mt-1 ml-1">Designation is required</p>}
+            </div>
 
-        <button type="submit" className="btn btn-primary w-full mt-3">Register</button>
-      </form>
+            {/* Profile Image Upload */}
+            <div>
+              <label className="text-purple-200 font-medium mb-2 block">Profile Image</label>
+              <input 
+                type="file"
+                onChange={handleImageUpload}
+                className="w-full bg-purple-900/50 border border-purple-600 rounded-xl px-4 py-3 text-white file:bg-purple-700 file:border-0 file:text-white file:rounded-lg file:px-4 file:py-2 file:mr-4 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300" 
+                placeholder="Your Profile picture" 
+              />
+            </div>
 
-      <p className="text-center mt-4">
-        Already have an account? <Link className="text-blue-500 underline" to="/login">Login</Link>
-      </p>
+            {/* Submit Button */}
+            <button 
+              type="submit" 
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 border border-purple-500 hover:border-purple-400 mt-6"
+            >
+              Create Account
+            </button>
+          </form>
 
-      <SocialLogin />
-    </div>
+          {/* Login Link */}
+          <p className="text-center mt-6 text-purple-200">
+            Already have an account?{' '}
+            <Link 
+              className="text-white hover:text-purple-300 underline font-medium transition-colors duration-300" 
+              to="/login"
+            >
+              Login here
+            </Link>
+          </p>
+
+          {/* Social Login */}
+          <div className="mt-6">
+            <SocialLogin />
+          </div>
+        </div>
+      </div>
   );
 };
 

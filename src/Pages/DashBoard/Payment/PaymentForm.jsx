@@ -99,31 +99,60 @@ if (result.paymentIntent.status === 'succeeded') {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 bg-white p-6 mt-10 rounded-xl shadow-md w-full max-w-md mx-auto"
-    >
-      <CardElement className="p-2 border rounded" />
-      <div className="text-black">
-        <span className="text-lime-700 text-xl font-bold">Employee Info:</span>
-        <br />
-        Name: {name} <br />
-        Email: {email} <br />
-        Salary: ${salary} <br />
-        Month: {month} <br />
-        Year: {year}
+    <div className="min-h-screen bg-purple-300 py-8 px-4">
+      <div className="max-w-md mx-auto">
+        <div className="bg-purple-800/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-600/50 shadow-2xl">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Payment Processing</h2>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Card Element */}
+            <div className="bg-purple-900/50 border border-purple-600 rounded-xl p-4">
+              <CardElement 
+                options={{
+                  style: {
+                    base: {
+                      color: 'white',
+                      fontSize: '16px',
+                      '::placeholder': {
+                        color: '#a78bfa',
+                      },
+                    },
+                  },
+                }}
+              />
+            </div>
+
+            {/* Employee Info */}
+            <div className="bg-purple-900/30 border border-purple-600/50 rounded-xl p-4">
+              <h3 className="text-purple-300 font-semibold mb-3">Employee Information</h3>
+              <div className="text-purple-200 space-y-2 text-sm">
+                <div><span className="font-medium">Name:</span> {name}</div>
+                <div><span className="font-medium">Email:</span> {email}</div>
+                <div><span className="font-medium">Salary:</span> <span className="text-green-400 font-semibold">${salary}</span></div>
+                <div><span className="font-medium">Period:</span> {month} {year}</div>
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-500/20 border border-red-600/50 rounded-xl p-3">
+                <p className="text-red-300 text-sm">{error}</p>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 border border-green-500 disabled:bg-green-600/50 disabled:cursor-not-allowed"
+              disabled={!stripe}
+            >
+              Pay ${salary}
+            </button>
+          </form>
+        </div>
       </div>
-      <button
-        type="submit"
-        className="btn btn-primary text-white w-full"
-        disabled={!stripe}
-      >
-        Pay ${salary}
-      </button>
-      {error && <p className="text-red-500">{error}</p>}
-    </form>
+    </div>
   );
 };
 
 export default PaymentForm;
-

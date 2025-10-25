@@ -23,14 +23,14 @@ const CustomTooltip = ({ active, payload, label }) => {
   const isVisible = active && payload && payload.length;
   return (
     <div
-      className="custom-tooltip bg-white p-2 rounded shadow"
+      className="custom-tooltip bg-purple-800 border border-purple-600 p-3 rounded-xl shadow-lg text-white"
       style={{ visibility: isVisible ? "visible" : "hidden" }}
     >
       {isVisible && (
         <>
           <p className="label font-semibold">{`${label} : $${payload[0].value}`}</p>
-          <p className="intro text-sm text-gray-600">{getIntroOfMonthYear(label)}</p>
-          <p className="desc text-xs text-gray-500">Salary payment details</p>
+          <p className="intro text-sm text-purple-200">{getIntroOfMonthYear(label)}</p>
+          <p className="desc text-xs text-purple-300">Salary payment details</p>
         </>
       )}
     </div>
@@ -72,65 +72,94 @@ const EmployeeDetails = () => {
     fetchDetails();
   }, [email, axiosInstance]);
 
-  if (!employee) return <div className="text-center mt-20">Loading...</div>;
+  if (!employee) return (
+    <div className="min-h-screen bg-purple-300 py-8 px-4 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+    </div>
+  );
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-6">
-      <div className="flex items-center gap-6">
-        <img
-          src={employee.photoURL}
-          alt={employee.name}
-          className="w-24 h-24 rounded-full border shadow"
-        />
-        <div>
-          <h2 className="text-2xl font-bold">{employee.name}</h2>
-          <p className="text-gray-600">{employee.designation || "N/A"}</p>
+    <div className="min-h-screen bg-purple-300 py-8 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-purple-800/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-600/50 shadow-2xl">
+          {/* Header */}
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-white mb-6">Employee Details</h2>
+            
+            {/* Employee Info Card */}
+            <div className="bg-purple-700/30 border border-purple-600/50 rounded-xl p-6 backdrop-blur-sm">
+              <div className="flex items-center gap-6">
+                <img
+                  src={employee.photoURL}
+                  alt={employee.name}
+                  className="w-24 h-24 rounded-full border-2 border-purple-500 shadow-lg"
+                />
+                <div>
+                  <h2 className="text-2xl font-bold text-white">{employee.name}</h2>
+                  <p className="text-purple-200 text-lg">{employee.designation || "N/A"}</p>
+                  <p className="text-purple-300">{employee.email}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Salary History Section */}
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6">Salary History</h3>
+            {payroll.length > 0 ? (
+              <div className="bg-purple-700/30 border border-purple-600/50 rounded-xl p-6 backdrop-blur-sm">
+                <ResponsiveContainer width="100%" height={400}>
+                  <BarChart
+                    data={payroll}
+                    margin={{ top: 5, right: 30, left: 120, bottom: 100 }}
+                    barCategoryGap={100}
+                    barSize={50}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#6D28D9" opacity={0.3} />
+                    <XAxis
+                      dataKey="label"
+                      angle={-15}
+                      textAnchor="end"
+                      interval={0}
+                      stroke="#E9D5FF"
+                      fontSize={12}
+                      label={{
+                        value: "Month, Year",
+                        position: "insideBottom",
+                        offset: -50,
+                        style: { textAnchor: "middle", fontSize: 14, fill: '#E9D5FF' },
+                      }}
+                    />
+                    <YAxis
+                      stroke="#E9D5FF"
+                      fontSize={12}
+                      label={{
+                        value: "Salary Amount ($)",
+                        angle: -90,
+                        position: "insideLeft",
+                        offset: -30,
+                        style: { textAnchor: "middle", fontSize: 14, fill: '#E9D5FF' },
+                      }}
+                    />
+                    <Tooltip content={CustomTooltip} />
+                    {/* Removed <Legend /> here */}
+                    <Bar 
+                      dataKey="salary" 
+                      fill="#A855F7" 
+                      radius={[4, 4, 0, 0]}
+                      stroke="#7C3AED"
+                      strokeWidth={1}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            ) : (
+              <div className="bg-purple-700/30 border border-purple-600/50 rounded-xl p-8 text-center">
+                <p className="text-purple-200 text-lg">No payroll data found.</p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-
-      <div>
-        <h3 className="text-xl font-semibold mb-2">Salary History</h3>
-        {payroll.length > 0 ? (     
-
-<ResponsiveContainer width={600} height={400}>
-  <BarChart
-    data={payroll}
-    margin={{ top: 5, right: 30, left: 120, bottom: 100 }}
-    barCategoryGap={100}
-    barSize={50}
-  >
-    <CartesianGrid strokeDasharray="3 3" />
-    <XAxis
-      dataKey="label"
-      angle={-15}
-      textAnchor="end"
-      interval={0}
-      label={{
-        value: "Month, Year",
-        position: "insideBottom",
-        offset: -50,
-        style: { textAnchor: "middle", fontSize: 24 },
-      }}
-    />
-    <YAxis
-      label={{
-        value: "Salary Amount ($)",
-        angle: -90,
-        position: "insideLeft",
-        offset: -30,
-        style: { textAnchor: "middle", fontSize: 24 },
-      }}
-    />
-    <Tooltip content={CustomTooltip} />
-    {/* Removed <Legend /> here */}
-    <Bar dataKey="salary" fill="#8884d8" radius={[4, 4, 0, 0]} />
-  </BarChart>
-</ResponsiveContainer>
-
-
-        ) : (
-          <p className="text-gray-500">No payroll data found.</p>
-        )}
       </div>
     </div>
   );
